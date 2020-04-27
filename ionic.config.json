@@ -1,0 +1,7 @@
+{
+  "name": "mayorsCap",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
