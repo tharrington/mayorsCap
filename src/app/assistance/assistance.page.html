@@ -1,0 +1,20 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{meeting.Name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+  
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>
+        <h2 class="ion-text-wrap"><span class="richText open-browser" [innerHTML]="meeting.In_App_Help_Card__c"></span></h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

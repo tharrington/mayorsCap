@@ -1,0 +1,66 @@
+
+<ion-header>
+
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title size="small">Attendees</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-header collapse="condense">              
+    <ion-toolbar> 
+      <ion-title size="large">Attendees</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+      <ion-searchbar showCancelButton="focus" #searchbar [(ngModel)]="queryText" (ngModelChange)="scrollTopAndSearch($event)" placeholder="Search Attendees"></ion-searchbar>
+    </ion-toolbar> 
+  </ion-header>
+
+
+  <div class="ion-padding" *ngIf="guests && guests.length > 0">
+    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="mayors">
+        <ion-label>Mayors</ion-label>
+      </ion-segment-button>
+      
+      <ion-segment-button value="guests">
+        <ion-label>Guests</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+
+  <ion-list *ngIf="segment == 'mayors'">
+    <ion-item *ngFor="let attendee of mayors" (click)="goToAttendeeDetail(attendee)" tappable>
+      <ion-avatar slot="start">
+        <img [src]="attendee.Contact__r.Image_URL__c" alt="mayor profile pic">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{attendee.Contact__r.Name}}</h2>
+        <p *ngIf="attendee.Contact__r.City__c && attendee.Contact__r.State__c">{{attendee.Contact__r.City__c}}, {{attendee.Contact__r.State__c}}</p>
+        <p>{{attendee.Role__c}}</p>
+        <p *ngIf="!(attendee.Contact__r.City__c && attendee.Contact__r.State__c)">{{attendee.Contact__r.Account.Name}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="segment == 'guests'">
+    <ion-item *ngFor="let attendee of guests" (click)="goToAttendeeDetail(attendee)" tappable>
+      <ion-avatar slot="start">
+        <img [src]="attendee.Contact__r.Image_URL__c" alt="mayor profile pic">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{attendee.Contact__r.Name}}</h2>
+        <p *ngIf="attendee.Contact__r.City__c && attendee.Contact__r.State__c">{{attendee.Contact__r.City__c}}, {{attendee.Contact__r.State__c}}</p>
+        <p>{{attendee.Role__c}}</p>
+        <p *ngIf="!(attendee.Contact__r.City__c && attendee.Contact__r.State__c)">{{attendee.Contact__r.Account.Name}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,31 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title size="small">Meetings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-header collapse="condense">              
+    <ion-toolbar> 
+      <ion-title size="large">Meetings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-list>
+    <ng-container *ngFor="let meeting of meetings">
+      <ion-item (click)="selectMeeting(meeting);" *ngIf="meeting.isPublished__c  && (meeting.Visibility__c == 'Open' ||  meeting.Visibility__c == 'Invited')"   tappable>
+       
+        <ion-label>
+          <h2 class="ion-text-wrap">{{meeting.Name}}</h2>
+          <p class="ion-text-wrap">{{meeting.Subtitle__c}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>

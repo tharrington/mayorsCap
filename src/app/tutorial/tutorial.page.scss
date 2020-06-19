@@ -1,0 +1,43 @@
+
+  .logo-image {
+    max-height: 40px !important;
+    max-width: 40px !important;
+    margin: 0 auto !important;
+    display:block;
+  }
+
+  ion-slides {
+    height: 85% !important;
+  }
+  .mayor-slide {
+    height:40%;
+  }
+
+  img {
+    /*position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;*/
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+
+
+  .smaller-image {
+    position: absolute  !important;
+    margin: auto !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0  !important;
+    bottom: 0  !important;
+  }
+
+  .slide-image {
+    height: auto !important;
+    max-width: 80%;
+    /*max-height: 70%;*/
+    padding: 50px;
+  }

@@ -1,0 +1,19 @@
+.profile-container {
+
+  height: 150px; 
+  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+
+  img {
+    width: auto;
+    margin: auto;
+    display: block;
+    width: 140px;
+    height: 140px;
+    max-width: 150px;
+    border-radius: 50%;
+  }
+}
+
+

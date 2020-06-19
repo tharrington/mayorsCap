@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-header collapse="condense"> 
+
+    <ion-toolbar>
+      <ion-searchbar showCancelButton="focus" #searchbar [(ngModel)]="queryText" (ngModelChange)="scrollTopAndSearch($event)" placeholder="Search Policies"></ion-searchbar>
+    </ion-toolbar> 
+  </ion-header>
+
+  <ion-list *ngIf="meeting && meeting.Id">
+    <ion-item class="ion-text-wrap">
+      <ion-label>
+        <h1 class="ion-text-wrap" *ngIf="meeting"><b>{{meeting}}</b></h1>
+        <h1 class="ion-text-wrap" *ngIf="committee"><b>{{committee}}</b></h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+
+  <ion-list class="mayor-list">
+    <ion-item *ngFor="let policy of policies" (click)="goToPolicy(policy)" tappable>
+      <ion-label>
+        <h2 class="ion-text-wrap">{{policy.Long_Name__c}}</h2>
+        <p><b>Adopted Date:</b> {{policy.adopted_date}}</p>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
+

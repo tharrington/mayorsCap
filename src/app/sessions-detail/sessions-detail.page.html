@@ -1,0 +1,142 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+  
+  <ion-list *ngIf="meeting && meeting.Id && session">
+    <ion-item class="ion-text-wrap">
+      <ion-label>
+        
+        <h1 class="ion-text-wrap"><b>{{session.Name}}</b></h1>
+        <p class="ion-text-wrap">{{session.date}}</p>
+
+        <p class="ion-text-wrap">{{session.start_time}} - {{session.end_time}}</p>
+        <p class="ion-text-wrap" *ngIf="session.Room__r && session.Room__r.Name">{{session.Room__r.Name}}</p>
+        <h2><ion-badge>{{session.Category__c}}</ion-badge></h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+
+
+
+
+
+
+  <ion-list *ngIf="meeting.Id">
+    <ion-item *ngIf="!session.Session_Enrollments__r && session.Allow_Registration__c" (click)="addEnrollment();">
+      <ion-icon slot="end" name="star-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Add To My Agenda</ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="session.Session_Enrollments__r" (click)="removeEnrollment();">
+      <ion-icon slot="end" name="star-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Remove From My Agenda</ion-label>
+    </ion-item>
+    <ion-item *ngIf="session.Watch_URL__c" (click)="showLink(session.Watch_URL__c);">
+      <ion-icon slot="end" name="tv-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Video</ion-label>
+    </ion-item>
+    <ion-item *ngIf="session && session.Survey_URL__c" (click)="showLink(session.Survey_URL__c);">
+      <ion-icon slot="end" name="globe-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>{{session.Survey_Call_to_Action__c}}</ion-label>
+    </ion-item>
+  </ion-list>
+
+
+
+  <ion-list *ngIf="meeting && meeting.Id && session">
+    <ng-container *ngIf="session && session.Session_Speakers__r && session.Session_Speakers__r.totalSize > 0">
+      <ng-container  *ngFor="let speaker of session.Session_Speakers__r.records; let i = index;">
+        <ion-item-divider *ngIf="i==0 || session.Session_Speakers__r.records[i].Type__c != session.Session_Speakers__r.records[i-1].Type__c" sticky > 
+          {{speaker.Type__c}}<span *ngIf="speaker.Type__c != 'Presiding' && speaker.Type__c != 'Remarks' && i != session.Session_Speakers__r.records.length && session.Session_Speakers__r.records[i+1] && speaker.Type__c == session.Session_Speakers__r.records[i+1].Type__c">s</span>
+        </ion-item-divider>
+
+        <ion-item (click)="goToMayorDetail(speaker);" class="mayor-item first-mayor-item">
+         
+          <ion-avatar slot="start">
+            <img [src]="speaker.Contact__r.Image_URL__c" alt="mayor profile pic">
+          </ion-avatar>
+          <ion-label>
+            <h2 class="ion-text-wrap">{{speaker.Contact__r.Name}}</h2>
+            
+            <p class="ion-text-wrap" *ngIf="speaker.Contact__r.City__c && speaker.Contact__r.State__c">{{speaker.Contact__r.City__c}}, {{speaker.Contact__r.State__c}}</p>
+            <p class="ion-text-wrap" *ngIf="!(speaker.Contact__r.City__c && speaker.Contact__r.State__c)">{{speaker.Contact__r.Account.Name}}</p>
+            <p class="ion-text-wrap">{{speaker.Contact__r.Title}}</p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ng-container>
+  </ion-list>
+
+
+
+  <ion-list *ngIf="meeting && meeting.Id && session">
+    <ion-list-header *ngIf="session && session.Abstract_Display_Title__c">
+      <ion-label>{{session.Abstract_Display_Title__c}}</ion-label>
+    </ion-list-header>
+
+    <ion-item class="ion-text-wrap" *ngIf="session && session.Abstract_Display_Title__c">
+      <span class="richText open-browser" [innerHTML]="session.Session_Abstract__c"></span>
+    </ion-item>    
+
+
+    <ion-list-header *ngIf="session && session.Attire__c" >
+      <ion-label>Attire</ion-label>
+    </ion-list-header>
+
+
+    <ion-item class="ion-text-wrap" *ngIf="session && session.Attire__c">
+      <span class="richText open-browser">{{session.Attire__c}}</span>
+    </ion-item>    
+
+    <ion-list-header *ngIf="session && session.Directions__c">
+      <ion-label>Directions</ion-label>
+    </ion-list-header>
+
+
+    <ion-item class="ion-text-wrap" *ngIf="session && session.Directions__c">
+      <span class="richText open-browser" [innerHTML]="session.Directions__c"></span>
+    </ion-item>    
+
+
+    <ng-container *ngIf="session.Session_Sponsors__r && session.Session_Sponsors__r.totalSize > 0">
+      <ion-list-header>
+        <ion-label>Session Sponsors</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let sponsor of  session.Session_Sponsors__r.records; let i = index" (click)="goToSponsor(sponsor)">
+        <ion-avatar slot="start">
+          <img [src]="sponsor.Sponsor__r.Image_URL__c" alt="mayor profile pic">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{sponsor.Sponsor__r.Name}}</h2>
+          <p class="ion-text-wrap">{{sponsor.Sponsor__r.Subtitle_Text__c}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+
+
+    <ng-container *ngIf="session.Resolution_Related_Sessions__r && session.Resolution_Related_Sessions__r.totalSize > 0">
+      <ion-list-header>
+        <ion-label>Resolutions</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let resolution of  session.Resolution_Related_Sessions__r.records; let i = index" (click)="goToResolution(resolution)" >
+        <ion-label>
+          <h2 class="ion-text-wrap">{{resolution.Resolution__r.Long_Name__c}}</h2>
+          <p class="ion-text-wrap"><b>Resolution Number:</b> {{resolution.Resolution__r.Resolution_Number__c}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>

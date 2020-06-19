@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar align-title=“center”>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="changeMeeting()">
+        <ion-icon slot="icon-only" name="calendar-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons> 
+    <ion-title size="small">{{meeting.Name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-header collapse="condense" translucent="true">              
+    <ion-toolbar> 
+      <ion-title size="large">{{meeting.Name}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  
+
+  <ion-list *ngIf="meeting.Id">
+
+    <ion-list-header>
+      <ion-label>About The Meeting</ion-label>
+    </ion-list-header>
+
+
+    <ion-item (click)="goToPage('Agenda')">
+      <ion-icon slot="end" name="star-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>My Agenda</ion-label>
+    </ion-item>
+
+    <ion-item (click)="goToPage('Activities')" *ngIf="meeting.Event_Menu_Items__c && meeting.Event_Menu_Items__c.indexOf('Activities') > -1" >
+      <ion-icon slot="end" name="eye-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Explore</ion-label>
+    </ion-item>
+
+    <ion-item (click)="goToPage('Committees')" *ngIf="meeting.Event_Menu_Items__c && meeting.Event_Menu_Items__c.indexOf('Committees') > -1" >
+      <ion-icon slot="end" name="people-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Committees</ion-label>
+    </ion-item>
+
+    <ion-item (click)="goToPage('Resolutions')" *ngIf="meeting.Event_Menu_Items__c && meeting.Event_Menu_Items__c.indexOf('Resolutions') > -1">
+      <ion-icon slot="end" name="bookmarks-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Resolutions</ion-label>
+    </ion-item>
+
+    <ion-item (click)="goToPage('Attendees')" *ngIf="meeting.Event_Menu_Items__c && meeting.Event_Menu_Items__c.indexOf('Attending') > -1">
+      <ion-icon slot="end" name="list-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Attendees</ion-label>
+    </ion-item>
+
+    <ion-item (click)="goToPage('Sponsors')" *ngIf="meeting.Event_Menu_Items__c && meeting.Event_Menu_Items__c.indexOf('USCM Sponsors') > -1">
+      <ion-icon slot="end" name="grid-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Sponsors</ion-label>
+    </ion-item> 
+
+    <ion-item (click)="goToPage('Notices')">
+      <ion-icon slot="end" name="information-circle-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Notices</ion-label>
+    </ion-item>
+
+    <ion-item (click)="goToPage('Assistance')">
+      <ion-icon slot="end" name="help-circle-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Assistance</ion-label>
+    </ion-item>
+  </ion-list> 
+ 
+
+
+  <ion-list *ngIf="meeting.Id">
+
+    <ion-list-header>
+      <ion-label>Meeting Agenda</ion-label>
+    </ion-list-header>
+
+    <ion-item-divider sticky style="background-color: white;" *ngIf="display_dates.length > 5 || display_dates.length == 5"> 
+      <ion-label >
+        <ion-button expand="block" (click)="openPicker()">Date : {{selected_date}} <ion-icon slot="end" name="caret-down-outline"></ion-icon></ion-button>
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item-divider sticky *ngIf="display_dates.length < 5" style="padding-bottom: 16px; padding-top: 16px; background-color: white;"> 
+      <ion-segment [(ngModel)]="selected_date" (ionChange)="changeDate($event)" *ngIf="display_dates.length < 5">
+        <ion-segment-button *ngFor="let meeting_date of display_dates; let i = index" value="{{meeting_date}}">
+          <span>{{meeting_date}}</span>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item-divider>
+
+    <ion-item *ngIf="!sessions || sessions.length == 0">
+      <ion-label>
+        <p>There are no sessions on this day.</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item-sliding *ngFor="let session of sessions">
+      <ion-item-options side="start" *ngIf="session.Allow_Registration__c" >
+        <ion-item-option color="danger" expandable (click)="removeSessionEnrollment(session, $event);" *ngIf="session.Session_Enrollments__r">
+          Remove
+        </ion-item-option>
+        <ion-item-option color="primary" expandable (click)="addSessionEnrollment(session, $event);" *ngIf="!session.Session_Enrollments__r">
+          <ion-icon slot="end" name="star-outline" ></ion-icon>
+          Add
+        </ion-item-option>
+      </ion-item-options>
+
+      <ion-item (click)="goToSessionDetails(session)">
+        <ion-label>
+          <h2>{{session.Name}}</h2>
+          <p>{{session.start_time}} - {{session.end_time}}</p>
+          <p *ngIf="session.Room__r && session.Room__r.Name">{{session.Room__r.Name}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-sliding>
+    
+    <!-- <ion-item *ngFor="let session of sessions" (click)="goToSessionDetails(session)">
+      <ion-label>
+        <h2>{{session.Name}}</h2>
+        <p>{{session.start_time}} - {{session.end_time}}</p>
+        <p *ngIf="session.Room__r && session.Room__r.Name">{{session.Room__r.Name}}</p>
+      </ion-label>
+    </ion-item> -->
+  </ion-list>
+</ion-content>
+

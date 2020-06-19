@@ -1,0 +1,55 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title size="small">Policies</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-header collapse="condense">              
+    <ion-toolbar> 
+      <ion-title size="large">Policies</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar >
+      <ion-searchbar showCancelButton="focus" #searchbar [(ngModel)]="queryText" (ngModelChange)="scrollTopAndSearch($event)" placeholder="Search Policies"></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="ion-padding">
+    <ion-segment [(ngModel)]="segment" (ionChange)="changeTab()">
+      <ion-segment-button value="committees"><ion-label>Committees</ion-label></ion-segment-button>
+      <ion-segment-button value="meetings"><ion-label>Meetings</ion-label></ion-segment-button>
+    </ion-segment>
+  </div>
+
+
+  <ion-list *ngIf="segment == 'meetings' && queryText.length <= 2" class="mayor-list">
+    <ion-item *ngFor="let meeting of meetings; let i = index" (click)="goToMeeting(meeting)" tappable>
+      <ion-label>
+        <h2 class="ion-text-wrap">{{meeting.name}}</h2>
+        <p class="ion-text-wrap">{{meeting.city}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="segment == 'committees' && queryText.length <= 2" class="mayor-list">
+    <ion-item *ngFor="let committee of committees; let i = index" (click)="goToCommittee(committee)" tappable>
+      <ion-label>
+        <h2 class="ion-text-wrap">{{committee}}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+
+  <ion-list *ngIf="queryText.length > 2" class="mayor-list">
+    <ion-item *ngFor="let policy of allPolicies" (click)="goToPolicy(policy)" tappable>
+      <ion-label>
+        <p class="ion-text-wrap">{{policy.Long_Name__c}}</p>
+        <p class="ion-text-wrap"><b>Adopted Date:</b> {{policy.adopted_date}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>  
+</ion-content>

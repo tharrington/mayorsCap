@@ -1,0 +1,161 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{mayor.Contact.Name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+
+<ion-content  *ngIf="mayor">
+  <ion-list>
+    <ion-item class="profile-container" lines="none">
+      <img [src]="mayor.Contact.Image_URL__c" class="mayor-profile-img" alt="mayor profile pic">
+    </ion-item>
+
+    <ion-item lines="none" class="ion-text-center">
+
+      <ion-label>
+        <h2>{{mayor.Contact.Name}}</h2>
+        <p class="ion-text-wrap" *ngIf="mayor.Contact.City__c && mayor.Contact.State__c">{{mayor.Contact.City__c}}, {{mayor.Contact.State__c}}</p>
+        <p class="ion-text-wrap" *ngIf="!(mayor.Contact.City__c && mayor.Contact.State__c)">{{mayor.Contact.Account.Name}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+
+  <ion-list *ngIf="mayor && mayor.Contact">
+    
+    <ion-item-divider sticky *ngIf="mayor && mayor.Contact">
+      About
+    </ion-item-divider>
+
+    <ion-item *ngIf="mayor && mayor.Contact && (mayor.Tab__c == 'Speakers & Guests' || !mayor.Contact.Next_General_Election__c)">
+      <ion-label>
+        <h2 class="ion-text-wrap">
+          <span class="richText open-browser" [innerHTML]="mayor.Contact.Content__c"></span>
+        </h2> 
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact && mayor.Contact.Population__c && mayor.Contact.Population__c > 0">
+      <ion-label>
+        <p>Population</p>
+        <h2 class="ion-text-wrap">{{formatNumber(mayor.Contact.Population__c)}}</h2> 
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact && mayor.Contact.Next_General_Election__c">
+      <ion-label>
+        <p>Next General Election</p>
+        <h2>{{ formatDate(mayor.Contact.Next_General_Election__c) }}</h2>
+      </ion-label>
+    </ion-item>
+
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Mayor_Bio_URL__c" (click)="goToLink(mayor.Contact.Mayor_Bio_URL__c, false)">
+      <ion-label>
+        <h2>Biography</h2>
+      </ion-label>
+      <ion-icon name="person-outline" slot="end"></ion-icon>
+    </ion-item>  
+ 
+    
+
+
+    <ion-item-divider sticky *ngIf="mayor && mayor.Contact && (mayor.Contact.Email || mayor.Contact.Phone || mayor.Contact.City_Website__c)">
+      Contact
+    </ion-item-divider>
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Email" (click)="mailTo(mayor.Contact.Email);">
+      <ion-label>
+        <p>Email</p>
+        <h2 class="ion-text-wrap">{{mayor.Contact.Email}}</h2>
+      </ion-label>
+      <ion-icon name="mail-outline" slot="end"></ion-icon>
+    </ion-item>
+
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Phone" (click)="dialPhone();">
+      <ion-label>
+        <p>Phone</p>
+        <h2 class="ion-text-wrap">{{mayor.Contact.Phone}}</h2>
+      </ion-label>
+      <ion-icon name="call-outline" slot="end"></ion-icon>
+    </ion-item>
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.City_Website__c" (click)="goToLink(mayor.Contact.City_Website__c)">
+      <ion-label>
+        <p>Website</p>
+        <h2 class="ion-text-wrap">{{mayor.Contact.City_Website__c}}</h2>
+      </ion-label>
+      <ion-icon name="globe-outline" slot="end"></ion-icon>
+
+    </ion-item> 
+
+
+
+    <ion-item-divider sticky *ngIf="mayor && mayor.Contact && (mayor.Contact.Mayor_Twitter_URL__c || mayor.Contact.Mayor_Facebook_URL__c || mayor.Contact.Mayor_Instagram_URL__c)" >
+      Social
+    </ion-item-divider>
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Mayor_Twitter_URL__c" (click)="goToLink(mayor.Contact.Mayor_Twitter_URL__c)">
+      <ion-label>
+        <p>Twitter</p>
+        <h2>{{ stripUsername(mayor.Contact.Mayor_Twitter_URL__c) }}</h2>
+      </ion-label>
+      <ion-icon name="logo-twitter" slot="end"></ion-icon>
+    </ion-item>
+
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Mayor_Facebook_URL__c" (click)="goToLink(mayor.Contact.Mayor_Facebook_URL__c)">
+      <ion-label>
+        <p>Facebook</p>
+        <h2 class="ion-text-wrap">View Profile</h2>
+      </ion-label>
+      <ion-icon name="logo-facebook" slot="end"></ion-icon>
+    </ion-item>
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Mayor_Instagram_URL__c && stripUsername(mayor.Contact.Mayor_Instagram_URL__c) != '@'" (click)="goToLink(mayor.Contact.Mayor_Instagram_URL__c)">
+      <ion-label>
+        <p>Instagram</p>
+        <h2 class="ion-text-wrap">{{ stripUsername(mayor.Contact.Mayor_Instagram_URL__c) }}</h2>
+      </ion-label>
+      <ion-icon name="logo-instagram" slot="end"></ion-icon>
+    </ion-item>
+
+
+
+    <ion-item-divider sticky class="item-divider-no-padding" *ngIf="mayor && mayor.Contact && mayor.Contact.Meet_the_Mayors_Metro__c">
+      Metro Economies
+    </ion-item-divider> 
+
+
+
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Contact.Meet_the_Mayors_Metro__c">
+      <ion-label>
+        <h2 class="ion-text-wrap"><span class="richText open-browser" [innerHTML]="mayor.Contact.Meet_the_Mayors_Metro__c"></span></h2>
+      </ion-label>
+    </ion-item>
+
+    <ion-item-divider sticky class="item-divider-no-padding" *ngIf="mayor && mayor.Contact__r && mayor.Contact__r.Awards__r && mayor.Contact__r.Awards__r.totalSize > 0">
+      Awards
+    </ion-item-divider>  
+
+    <ng-container *ngIf="mayor.Contact__r && mayor.Contact__r.Awards__r && mayor.Contact__r.Awards__r.totalSize > 0">
+      <ion-item *ngFor="let award of mayor.Contact__r.Awards__r.records">
+        <ion-label>
+          <h2 class="ion-text-wrap">{{award.Award__r.Name}}</h2>
+          <p class="ion-text-wrap">{{award.Year__c}} - {{award.Prize_Level__c}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+
+  </ion-list>
+</ion-content>

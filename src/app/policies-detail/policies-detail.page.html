@@ -1,0 +1,36 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="sharePolicy()">
+        <ion-icon slot="icon-only" name="share-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons> 
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list *ngIf="policy">
+    <ion-item class="ion-text-wrap" lines="none">
+      <ion-label>
+        <h1 class="ion-text-wrap"><b>{{policy.Long_Name__c}}</b></h1>
+        <p><b>Committee:</b> {{policy.Category__c}}</p>
+        <p><b>Adopted Date:</b> {{policy.adopted_date}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list class="mayor-list">
+    <ion-item class="ion-text-wrap" lines="none">
+      <span class="richText open-browser" [innerHTML]="policy.Resolution_Text__c"></span>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

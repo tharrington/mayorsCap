@@ -1,0 +1,80 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title size="small">Mayors</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+  <ion-header collapse="condense">              
+    <ion-toolbar> 
+      <ion-title size="large">Mayors</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+      <ion-searchbar showCancelButton="focus" #searchbar [(ngModel)]="queryText" (ngModelChange)="scrollTopAndSearch($event)" placeholder="Search Mayors"></ion-searchbar>
+    </ion-toolbar> 
+  </ion-header>
+
+  <div class="ion-padding">
+    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="leadership">
+        <ion-label>Leadership</ion-label>
+      </ion-segment-button>        
+      
+      <ion-segment-button value="mayors">
+        <ion-label>All Mayors</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <ion-list *ngIf="segment == 'leadership'">
+    <ng-container *ngFor="let key of leadershipSegments">
+      <ion-item-divider sticky> 
+        <ion-label>
+          {{key[0].Sort_Order__c.substring(3)}}<span *ngIf="key && key[0].Sort_Order__c.substring(3) != 'Advisory Board' && key.length > 1">s</span>
+        </ion-label>
+      </ion-item-divider>
+
+      <ion-item (click)="goToMayor(mayor);" *ngFor="let mayor of key"  tappable>
+        <ion-avatar slot="start">
+          <img [src]="mayor.Contact.Image_URL__c" alt="mayor profile pic">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{mayor.Contact.Name}}</h2>
+          <p *ngIf="mayor.Contact.City__c && mayor.Contact.State__c">{{mayor.Contact.City__c}}, {{mayor.Contact.State__c}}</p>
+          <p *ngIf="!(mayor.Contact.City__c && mayor.Contact.State__c)">{{mayor.Contact.Account.Name}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+
+  <ion-list *ngIf="segment == 'mayors'">
+    <ng-container *ngFor="let mayor of mayors; let i = index">
+      <ion-item-divider *ngIf="i==0 || (mayor.Contact.State__c != mayors[i-1].Contact.State__c)" sticky> 
+        <ion-label>{{mayor.Contact.State__c}}</ion-label>
+      </ion-item-divider>
+
+      <ion-item (click)="goToMayor(mayor)" tappable>
+        <ion-avatar slot="start">
+          <img [src]="mayor.Contact.Image_URL__c" alt="mayor profile pic">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{mayor.Contact.Name}}</h2>
+          <p *ngIf="mayor.Contact.City__c">{{mayor.Contact.City__c}}, {{mayor.Contact.State__c}}</p>
+          <p>{{mayor.Role__c}}</p>
+          <p *ngIf="!mayor.Contact.City__c">{{mayor.Contact.Account.Name}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)" *ngIf="queryText.length < 3">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-list>
+
+</ion-content>

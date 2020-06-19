@@ -1,0 +1,47 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list *ngIf="news">
+    <ion-item class="ion-text-wrap" lines="none">
+      <ion-label *ngIf="news.title">
+        <h1 class="ion-text-wrap"><b>{{news.title}}</b></h1>
+      </ion-label>
+      <ion-label *ngIf="!news.title">
+        <h1 class="ion-text-wrap"><b>{{news.name}}</b></h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list>
+    <ion-item (click)="view();">
+      <ion-icon slot="end" name="globe-outline" *ngIf="news.source == 'rss'"></ion-icon>
+      <ion-label *ngIf="news.source == 'rss'">Visit on usmayors.org</ion-label>
+
+      <ion-icon slot="end" name="logo-youtube" *ngIf="news.source == 'youtube'"></ion-icon>
+      <ion-label *ngIf="news.source == 'youtube'">Visit on YouTube.com</ion-label>
+
+      <ion-icon slot="end" name="logo-flickr" *ngIf="news.source == 'flickr'"></ion-icon>
+      <ion-label *ngIf="news.source == 'flickr'">Visit on Flickr</ion-label>
+
+      <ion-icon slot="end" name="logo-instagram" *ngIf="news.source == 'instagram'"></ion-icon>
+      <ion-label *ngIf="news.source == 'instagram'">Visit on Instagram</ion-label>
+    </ion-item>
+
+
+    <ion-item class="ion-text-wrap">
+      <ion-label>
+        <h2 class="ion-text-wrap"><span class="richText open-browser" [innerHTML]="news.content"></span></h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
