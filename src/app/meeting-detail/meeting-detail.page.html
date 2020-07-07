@@ -83,13 +83,13 @@
       <ion-label>Meeting Agenda</ion-label>
     </ion-list-header>
 
-    <ion-item-divider sticky style="background-color: white;" *ngIf="display_dates.length > 5 || display_dates.length == 5"> 
+    <ion-item-divider sticky *ngIf="display_dates.length > 5 || display_dates.length == 5" style="background-color: transparent;"> 
       <ion-label >
         <ion-button expand="block" (click)="openPicker()">Date : {{selected_date}} <ion-icon slot="end" name="caret-down-outline"></ion-icon></ion-button>
       </ion-label>
     </ion-item-divider>
 
-    <ion-item-divider sticky *ngIf="display_dates.length < 5" style="padding-bottom: 16px; padding-top: 16px; background-color: white;"> 
+    <ion-item-divider sticky *ngIf="display_dates.length < 5" style="padding-bottom: 16px; padding-top: 16px; background-color: transparent;"> 
       <ion-segment [(ngModel)]="selected_date" (ionChange)="changeDate($event)" *ngIf="display_dates.length < 5">
         <ion-segment-button *ngFor="let meeting_date of display_dates; let i = index" value="{{meeting_date}}">
           <span>{{meeting_date}}</span>

@@ -11,7 +11,7 @@ import { Plugins } from '@capacitor/core';
 const { Storage } = Plugins;
 import * as moment from 'moment';
 
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+// import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 @Component({
   selector: 'app-resolutions-detail',
@@ -38,7 +38,7 @@ export class ResolutionsDetailPage implements OnInit {
     public mayorData         : MayorDataService,
     private router           : Router,
     private activatedRoute   : ActivatedRoute,
-    private emailComposer    : EmailComposer
+    // private emailComposer    : EmailComposer
   ) {
 
     this.activatedRoute.queryParams.subscribe(params => {
@@ -104,7 +104,7 @@ export class ResolutionsDetailPage implements OnInit {
     this.mayorData.querySf('verifiedcontact', 'GET', true, null).then((verifiedcontact) => {
       Storage.set({ key: 'verifiedcontact', value : JSON.stringify(verifiedcontact) });
       this.verifiedcontact = verifiedcontact;
-      console.log('### verifiedcontact: ' + JSON.stringify(this.verifiedcontact));
+
       if(verifiedcontact) {
         this.isVerifiedContact = true;
         this.getVotes();
@@ -155,7 +155,7 @@ export class ResolutionsDetailPage implements OnInit {
         }
       }
       console.log('### resolution: ' + JSON.stringify(this.resolution));
-
+      console.log('### meeting: ' + JSON.stringify(this.meeting));
     }, err => {
     }); 
   }
@@ -174,7 +174,6 @@ export class ResolutionsDetailPage implements OnInit {
         moment() >= moment(this.meeting.Voting_Business_Start__c) && 
         moment() <= moment(this.meeting.Voting_Business_End__c)) {
       this.showVotingButton = true;
-    console.log('### is business');
       this.votingSession = 'Business';
     } else if (this.meeting.Voting_Committee_Start__c &&
         this.meeting.Voting_Committee_End__c &&
@@ -187,11 +186,6 @@ export class ResolutionsDetailPage implements OnInit {
       this.showVotingButton = false;
       this.votingSession = null;          
     }
-
-  }
-
-  changeTab() {
-
   }
 
 
@@ -390,7 +384,7 @@ export class ResolutionsDetailPage implements OnInit {
         body: body,
         isHtml: true
     };
-    this.emailComposer.open(email);
+    // this.emailComposer.open(email);
   }
 
 

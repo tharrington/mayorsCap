@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MayorDataService } from '../api/mayor-data.service';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+// import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 declare var window;
 import * as moment from 'moment';
@@ -17,7 +17,7 @@ export class PoliciesDetailPage implements OnInit {
     public mayorData         : MayorDataService,
     private activatedRoute   : ActivatedRoute,
     private router           : Router,
-    private emailComposer    : EmailComposer
+    // private emailComposer    : EmailComposer
   ) {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -54,6 +54,6 @@ export class PoliciesDetailPage implements OnInit {
         body: body,
         isHtml: true
     };
-    this.emailComposer.open(email);
+    // this.emailComposer.open(email);
   }
 }

@@ -1,11 +1,14 @@
 
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title size="small">Sponsors</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
+<ion-content>
 
   <ion-header collapse="condense">              
     <ion-toolbar> 
@@ -31,14 +34,14 @@
 
   <ion-list *ngIf="segment == 'uscm'">
     <ng-container  *ngFor="let key of sponsorSegments ; let i = index">
-      <ion-item-divider  [ngStyle]="{'background-color': meeting.Primary_Color__c }" style=" margin-bottom: 0px !important;" color="light" sticky >
+      <ion-item-divider  sticky >
         {{key[0].Sponsorship_Level__c}}
       </ion-item-divider>
 
       <ion-item (click)="goToSponsorDetail(sponsor)" *ngFor="let sponsor of key; let j=index;">
-        <ion-avatar item-left>
+        <ion-thumbnail slot="start">
           <img [src]="sponsor.Sponsor__r.Image_URL__c">
-        </ion-avatar>
+        </ion-thumbnail>
         <ion-label>
           <h2 class="ion-text-wrap">{{sponsor.Sponsor_Name__c}}</h2>
           <p class="ion-text-wrap"><span class="richText open-browser" [innerHTML]="sponsor.Sponsor__r.Subtitle_Text__c"></span></p>
@@ -52,15 +55,15 @@
     <ng-container  *ngFor="let sponsor of hostSponsors; let i = index">
 
       <ion-item-divider *ngIf="i==0 || (hostSponsors[i].Sponsorship_Level__c != hostSponsors[i-1].Sponsorship_Level__c)" sticky >  
-      {{sponsor.Sponsorship_Level__c}}
+        {{sponsor.Sponsorship_Level__c}}
       </ion-item-divider>
 
 
 
       <ion-item (click)="goToSponsorDetail(sponsor)">
-        <ion-avatar item-left >
+        <ion-thumbnail slot="start">
           <img [src]="sponsor.Sponsor__r.Image_URL__c">
-        </ion-avatar>
+        </ion-thumbnail>
         <ion-label>
           <h2 class="ion-text-wrap">{{sponsor.Sponsor_Name__c}}</h2>
           <p class="ion-text-wrap">{{sponsor.Sponsor__r.Subtitle_Text__c}}</p>

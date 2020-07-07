@@ -41,6 +41,8 @@ export class ResolutionCategoriesPage implements OnInit {
     this.categories = [];
     let categories = [];
 
+    console.log('### resolution: ' + JSON.stringify(resolutions[0]));
+
     
     for(let resolution of resolutions) {
       if(resolution.Event__c == this.meeting.Id) {

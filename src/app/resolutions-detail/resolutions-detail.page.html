@@ -47,9 +47,9 @@
       <ion-label>Voting</ion-label>
     </ion-item>
 
-    <ion-item *ngIf="isVerifiedContact && verifiedcontact.Contact_Roles__r.totalSize == 1 && sponsors && sponsors.length == 0" (click)="postSponsor(true);">
+    <ion-item *ngIf="isVerifiedContact && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize == 1 && sponsors && sponsors.length == 0" (click)="postSponsor(true);">
       <ion-icon slot="end" name="create-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Sponsor</ion-label>
+      <ion-label>Sponsor 1</ion-label>
     </ion-item>
 
 
@@ -57,9 +57,9 @@
       <ion-icon slot="end" name="create" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
       <ion-label>Revoke</ion-label>
     </ion-item>
-    <ion-item *ngIf="isVerifiedContact && verifiedcontact.Contact_Roles__r.totalSize > 1" (click)="postSponsor(false);">
+    <ion-item *ngIf="isVerifiedContact  && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize > 1" (click)="postSponsor(false);">
       <ion-icon slot="end" name="create" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Sponsor</ion-label>
+      <ion-label>Sponsor 2</ion-label>
     </ion-item>   
   </ion-list>
 

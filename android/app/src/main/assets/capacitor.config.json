@@ -1,0 +1,12 @@
+{
+  "appId": "org.usmayors.eventapp",
+  "appName": "USCM",
+  "bundledWebRuntime": true,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 500
+    }
+  }
+}

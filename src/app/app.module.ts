@@ -16,7 +16,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { SearchPipe } from './core/search.pipe';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+// import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 @NgModule({
   declarations: [AppComponent, SearchPipe],
@@ -31,7 +31,7 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
     StatusBar,
     SplashScreen,
     FileTransfer,
-    EmailComposer,
+    // EmailComposer,
     InAppBrowser,
     HTTP,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

@@ -109,8 +109,8 @@ export class SponsorsPage implements OnInit {
 
   goToSponsorDetail(sponsor: any) {
 
-    // let navigationExtras: NavigationExtras = { state: { sponsor: sponsor, meeting: this.meeting } };
-    // this.router.navigate(['/tabs/tabs/meetings/sponsors/' + sponsor.Id], navigationExtras);
+    let navigationExtras: NavigationExtras = { state: { sponsor: sponsor, meeting: this.meeting } };
+    this.router.navigate(['/tabs/tabs/meetings/sponsors/' + sponsor.Id], navigationExtras);
   }
 
   scrollTopAndSearch() { 
