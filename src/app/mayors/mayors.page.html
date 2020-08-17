@@ -63,7 +63,7 @@
         <ion-label>
           <h2>{{mayor.Contact.Name}}</h2>
           <p *ngIf="mayor.Contact.City__c">{{mayor.Contact.City__c}}, {{mayor.Contact.State__c}}</p>
-          <p>{{mayor.Role__c}}</p>
+          <!-- <p>{{mayor.Role__c}}</p> -->
           <p *ngIf="!mayor.Contact.City__c">{{mayor.Contact.Account.Name}}</p>
         </ion-label>
       </ion-item>

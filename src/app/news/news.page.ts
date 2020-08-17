@@ -8,6 +8,7 @@ const { Storage } = Plugins;
 import * as moment from 'moment';
 
 
+
 @Component({
   selector: 'app-news',
   templateUrl: './news.page.html',
@@ -30,7 +31,7 @@ export class NewsPage implements OnInit {
 
     this.mayorData.getSocialPosts().then((feed_items) => { 
       Storage.set({ key : 'social', value : JSON.stringify(feed_items) });
-      console.log('### items: ' + JSON.stringify(feed_items[0]));
+
       this.feed_items = this.calculatePostTime(feed_items);
       this.parseItems();
     });
@@ -54,7 +55,12 @@ export class NewsPage implements OnInit {
    */
   goToNews(news) {
     let navigationExtras: NavigationExtras = { state: { news: news } };
-    this.router.navigate(['/tabs/tabs/news/' + news._id], navigationExtras);
+    // this.router.navigate(['/tabs/tabs/news/' + news._id], navigationExtras);
+
+    this.navCtrl.setDirection('forward');
+
+    this.router.navigateByUrl('/tabs/tabs/news/' + news._id, navigationExtras);
+     
   }
 
   async getSocialPosts() {

@@ -109,7 +109,12 @@ export class PoliciesPage implements OnInit {
 
       if(entry.isPublished__c && (entry.Status__c == 'Adopted' || entry.Status__c == 'Approved')) {
         this.allPolicies.push(entry);
-        meetings.push(entry.Event__r.Name + ' (' + moment(entry.Event__r.Start_Date__c).format('YYYY') + ') ' + entry.Event__r.Host_City__r.City__c);
+        if(entry.Event__r && entry.Event__r.Host_City__r) {
+          meetings.push(entry.Event__r.Name + ' (' + moment(entry.Event__r.Start_Date__c).format('YYYY') + ') ' + entry.Event__r.Host_City__r.City__c);
+        } else {
+          meetings.push(entry.Event__r.Name + ' (' + moment(entry.Event__r.Start_Date__c).format('YYYY') + ') ');
+        }
+        
         committees.push(entry.Category__c);
 
         if(entry && entry.Adopted_Date__c) {

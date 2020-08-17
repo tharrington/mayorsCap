@@ -93,7 +93,7 @@ export class SponsorsPage implements OnInit {
 
   ngOnInit() {
     this.getSponsors();
-    this.mayorData.querySf('sponsors', 'GET', false, null).then((sponsors) => {
+    this.mayorData.querySf('sponsors', 'GET', true, null).then((sponsors) => {
       Storage.set({ key: 'sponsors', value : JSON.stringify(sponsors) });
       console.log('### sponsors: ' + sponsors.length);
       this.handleSponsors(sponsors);

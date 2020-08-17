@@ -46,7 +46,7 @@ export class CommitteesPage implements OnInit {
   ngOnInit() {
     this.loadCommittee();
 
-    this.mayorData.querySf('committees', 'GET', false, null).then((committees) => {
+    this.mayorData.querySf('committees', 'GET', true, null).then((committees) => {
       Storage.set({ key: 'committees', value : JSON.stringify(committees) });
       this.committees = committees;
     }, err => {

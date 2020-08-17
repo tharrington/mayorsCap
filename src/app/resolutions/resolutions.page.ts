@@ -63,6 +63,7 @@ export class ResolutionsPage implements OnInit {
     } else {
       this.resolutions = this.allResolutions;
     }    
+    
   }
 
 

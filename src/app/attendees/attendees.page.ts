@@ -76,7 +76,7 @@ export class AttendeesPage  implements OnInit {
   ngOnInit() {
     this.getAttending();
 
-    this.mayorData.querySf('attending', 'GET', false, null).then((attendees) => {
+    this.mayorData.querySf('attending', 'GET', true, null).then((attendees) => {
       Storage.set({ key : 'attending', value : JSON.stringify(attendees) });
       console.log('### attending: ' + attendees.length);
       console.log('### attendees: ' + attendees[0]);

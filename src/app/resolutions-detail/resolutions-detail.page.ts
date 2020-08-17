@@ -2,16 +2,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonContent, IonSearchbar, NavController, PickerController } from '@ionic/angular';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { PickerOptions } from "@ionic/core";
 
 import { SearchPipe } from '../core/search.pipe';
-import { PickerOptions } from "@ionic/core";
 
 import { MayorDataService } from '../api/mayor-data.service';
 import { Plugins } from '@capacitor/core'; 
 const { Storage } = Plugins;
 import * as moment from 'moment';
 
-// import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 @Component({
   selector: 'app-resolutions-detail',
@@ -24,11 +24,20 @@ export class ResolutionsDetailPage implements OnInit {
   segment = 'resolution';
   isVerifiedContact;
   votingSession;
-  showVotingButton;
-  verifiedcontact;
-  votes;          // votes for which the current user owns
 
+  isAttendee = false;
+  resbycommittee;
+  showSponsorship = false;
+  showVotingButton = false;
+  verifiedcontact;
+  votingOpen = false;
+  sponsorOpen = false;
+  selVerifiedContact;
+  selVerifiedContactDisplayName;
+  votes = [];          // votes for which the current user owns
   sponsors = [];       // sponsoships for which the current user owns
+  allVotes = [];          // votes for which the current user owns
+  allSponsors = [];       // sponsoships for which the current user owns
 
 
   @ViewChild(IonContent, {static: false}) content : IonContent;
@@ -36,9 +45,11 @@ export class ResolutionsDetailPage implements OnInit {
   constructor(
     public navCtrl           : NavController,
     public mayorData         : MayorDataService,
+    private pickerController : PickerController,
+
     private router           : Router,
     private activatedRoute   : ActivatedRoute,
-    // private emailComposer    : EmailComposer
+    private emailComposer    : EmailComposer
   ) {
 
     this.activatedRoute.queryParams.subscribe(params => {
@@ -46,7 +57,7 @@ export class ResolutionsDetailPage implements OnInit {
         this.meeting = this.router.getCurrentNavigation().extras.state.meeting;
         this.resolution = this.router.getCurrentNavigation().extras.state.resolution;
 
-        this.getResolution();
+        
         if(this.resolution && this.resolution.Resolution_Related_Sessions__r && this.resolution.Resolution_Related_Sessions__r.records) {
           for(let entry of this.resolution.Resolution_Related_Sessions__r.records) {
             entry.Session__r.start_time = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('h:mm a');
@@ -54,6 +65,7 @@ export class ResolutionsDetailPage implements OnInit {
             entry.Session__r.day = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('dddd, MMMM Do YYYY');
           }
         }
+        
       }
     });
   }
@@ -98,49 +110,153 @@ export class ResolutionsDetailPage implements OnInit {
     const { value } = await Storage.get({ key: 'verifiedcontact' });
     if(value) {
       this.verifiedcontact = JSON.parse(value);
-      this.evaluateVotingTime();
+      this.determineVoting();
     }
 
     this.mayorData.querySf('verifiedcontact', 'GET', true, null).then((verifiedcontact) => {
       Storage.set({ key: 'verifiedcontact', value : JSON.stringify(verifiedcontact) });
       this.verifiedcontact = verifiedcontact;
+      console.log('### verifiedcontact: ' + JSON.stringify(verifiedcontact));
 
-      if(verifiedcontact) {
+      if(this.verifiedcontact) {
+
+        if(this.verifiedcontact.Contact_Roles__r.totalSize > 0) {
+          this.selVerifiedContact = this.verifiedcontact.Contact_Roles__r.records[0].Id;
+          this.selVerifiedContactDisplayName = this.verifiedcontact.Contact_Roles__r.records[0].Account__r.City__c + ', ' + this.verifiedcontact.Contact_Roles__r.records[0].Account__r.State__c;
+        }
+
         this.isVerifiedContact = true;
         this.getVotes();
-        this.getResSponsers();
+        this.getResSponsers();   
+
       }
-      this.evaluateVotingTime();
+      this.getResolution();
+      
     });
+  }
+
+  matchVotes() {
+    let votes = [];
+    for(let con of this.verifiedcontact.Contact_Roles__r.records) {
+      if(con.Id == this.selVerifiedContact) {
+        for(let vote of this.allVotes) {
+          if(vote.cityName == con.Account__r.City__c) {
+            votes.push(vote);
+          }
+        }
+      }
+    }
+
+    this.votes = votes;
+  }
+
+  matchSponsors() {
+    let sponsors = [];
+    for(let con of this.verifiedcontact.Contact_Roles__r.records) {
+      for(let sponsor of this.allSponsors) {
+        if(sponsor.Contact__r.City__c == con.Account__r.City__c && con.Id == this.selVerifiedContact) {
+          sponsors.push(sponsor);
+        }
+      }
+    }
+
+    this.sponsors = sponsors;
   }
 
   async getVotes() {
     const { value } = await Storage.get({ key: 'votes/' + this.resolution.Id });
     if(value) {
-      this.votes = JSON.parse(value);
+      this.allVotes = JSON.parse(value);
+      this.matchSponsors();
     }
 
     this.mayorData.querySf('votes/' + this.resolution.Id, 'GET', true, null).then((votes) => {
       Storage.set({ key: 'votes/' + this.resolution.Id, value : JSON.stringify(votes) });
-      this.votes = votes;
+      this.allVotes = votes;
+      this.matchVotes();
     });
   }
 
   async getResSponsers() {
     const { value } = await Storage.get({ key: 'resolution_sponsors/' + this.resolution.Id });
     if(value) {
-      this.sponsors = JSON.parse(value);
+      this.allSponsors = JSON.parse(value);
+      this.matchSponsors();
     }
 
     this.mayorData.querySf('resolution_sponsors/' + this.resolution.Id, 'GET', true, null).then((sponsors) => {
       Storage.set({ key: 'resolution_sponsors/' + this.resolution.Id, value : JSON.stringify(sponsors) });
-      this.sponsors = sponsors;
+      this.allSponsors = sponsors;
+      this.matchSponsors();
     });
   }
 
+
+  /**
+   *
+   */
+  determineSponsorship() {
+    this.showSponsorship = false;
+    this.sponsorOpen = false;
+
+    if(this.resbycommittee) {
+      for(let resbycomm of this.resbycommittee) {
+        if(this.selVerifiedContact == resbycomm.role.Id && (resbycomm.canSponsorSubmission || resbycomm.canSponsorPrior)) {
+          this.showSponsorship = true;
+        }
+        if(resbycomm.canSponsorSubmission || resbycomm.canSponsorPrior) {
+          this.sponsorOpen = true;
+        }
+      }
+      console.log('### sponsorOpen open: ' + this.sponsorOpen);
+    }
+    
+  }
+
+  /**
+   *
+   */
+  determineVoting() {
+    // this.selVerifiedContact = this.verifiedcontact.Contact_Roles__r.records[0].Id;
+    this.showVotingButton = false;
+    this.votingOpen = false;
+    console.log('### this.selVerifiedContact: ' + this.selVerifiedContact);
+    if(this.resbycommittee) {
+      for(let resbycomm of this.resbycommittee) {
+        if(this.selVerifiedContact == resbycomm.role.Id && (resbycomm.canVoteBusiness || resbycomm.canVoteCommittee)) {
+          this.showVotingButton = true;
+
+          if(resbycomm.canVoteBusiness) {
+            this.votingSession = 'Business';
+          } else {
+            this.votingSession = 'Committee';
+          }
+        }
+        if(resbycomm.canVoteBusiness || resbycomm.canVoteCommittee) {
+          this.votingOpen = true;
+        }
+      }
+      console.log('### voting open: ' + this.votingOpen);
+    }
+  }
+
+  determineVotingSponsorship() {
+    this.mayorData.querySf('resbycommittee/' + this.resolution.Id, 'GET', true, null).then((resbycommittee) => {
+      console.log('### resbycommittee: ' + JSON.stringify(resbycommittee));
+      this.resbycommittee = resbycommittee;
+      this.determineVoting();
+      this.determineSponsorship();
+    }, err => {
+    }); 
+  }
+
+  /**
+   *
+   */
   getResolution() {
     this.mayorData.querySf('resolutions/' + this.resolution.Id, 'GET', false, null).then((resolutions) => {
       this.resolution = resolutions[0];
+      console.log('### resolutions[0]: ' + JSON.stringify(resolutions[0]));
 
       if(this.resolution  && this.resolution.Adopted_Date__c) {
         this.resolution.adopted_date = moment.utc(this.resolution.Adopted_Date__c).format('M/D/YYYY');
@@ -154,39 +270,23 @@ export class ResolutionsDetailPage implements OnInit {
           entry.Session__r.day = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('dddd, MMMM Do YYYY');
         }
       }
-      console.log('### resolution: ' + JSON.stringify(this.resolution));
-      console.log('### meeting: ' + JSON.stringify(this.meeting));
+
+      this.determineVotingSponsorship();
+
     }, err => {
     }); 
   }
 
+
+  /**
+   *
+   */
   ngOnInit() {
     this.getVerifiedContact();
   }
 
 
-  /**
-   * evaluateVotingTime : determine if voting is allowed at the current time.
-   */
-  evaluateVotingTime() { 
-    if (this.meeting.Voting_Business_Start__c &&
-        this.meeting.Voting_Business_End__c &&
-        moment() >= moment(this.meeting.Voting_Business_Start__c) && 
-        moment() <= moment(this.meeting.Voting_Business_End__c)) {
-      this.showVotingButton = true;
-      this.votingSession = 'Business';
-    } else if (this.meeting.Voting_Committee_Start__c &&
-        this.meeting.Voting_Committee_End__c &&
-        moment() >= moment(this.meeting.Voting_Committee_Start__c) && 
-        moment() <= moment(this.meeting.Voting_Committee_End__c)) {
-      this.showVotingButton = true;
-      this.votingSession = 'Committee';
 
-    } else {
-      this.showVotingButton = false;
-      this.votingSession = null;          
-    }
-  }
 
 
   /**
@@ -224,49 +324,73 @@ export class ResolutionsDetailPage implements OnInit {
     });
   }
 
-  postSponsor(applySpnsorship : boolean) {
 
+  /**
+   * open date picker
+   */
+  async openPicker(){
+    let col_options = [];
+
+    for(let con of this.verifiedcontact.Contact_Roles__r.records) {
+      col_options.push({ text: con.Account__r.City__c + ', ' + con.Account__r.State__c, value: con.Id });
+    }
+    
+    let options: PickerOptions = {
+      buttons: [
+        {
+          text: "Cancel",
+          role: 'cancel'
+        },
+        {
+          text:'Ok',
+          handler:(value:any) => {
+            console.log('### val: ', value);
+            this.selVerifiedContact = value.City.value;
+            this.selVerifiedContactDisplayName = value.City.text;
+            this.determineVoting();
+            this.determineSponsorship();
+            let votes = [];
+            let sponsors = [];
+            for(let con of this.verifiedcontact.Contact_Roles__r.records) {
+              if(con.Id == this.selVerifiedContact) {
+                for(let vote of this.allVotes) {
+                  if(vote.cityName == con.Account__r.City__c) {
+                    votes.push(vote);
+                  }
+                }
+
+                for(let sponsor of this.allSponsors) {
+                  if(sponsor.Contact__r.City__c == con.Account__r.City__c) {
+                    sponsors.push(sponsor);
+                  }
+                }
+              }
+            }
+            console.log('### votes: ' + JSON.stringify(votes));
+            console.log('### sponsors: ' + JSON.stringify(sponsors));
+            this.votes = votes;
+            this.sponsors = sponsors;
+
+          }
+        }
+      ],
+      columns:[{
+        name: 'City',
+        options: col_options
+      }]
+    };
+
+    let picker = await this.pickerController.create(options);
+    picker.present()
+  }
+
+  postSponsor(applySpnsorship : boolean) {
     if(applySpnsorship) {
-      this.sponsorResolution(this.verifiedcontact.Contact_Roles__r.records[0].Id);
+      // this.sponsorResolution(this.verifiedcontact.Contact_Roles__r.records[0].Id);
+      this.sponsorResolution(this.selVerifiedContact);
     } else {
       this.revokeSponsorResolution(this.sponsors[0].Id);
     }
-
-
-    // // if multiple contact roles, present modal
-    // if(this.verifiedcontact && this.verifiedcontact.Contact_Roles__r && this.verifiedcontact.Contact_Roles__r.totalSize > 1) {
-    //   let cityModal = this.modalCtrl.create(CityModalPage, { verifiedcontact: this.verifiedcontact, sponsors: this.sponsors, title : 'Sponsor', meeting: this.meeting });
-    //   cityModal.present();
-    //   cityModal.onDidDismiss(data => {
-    //     if(data) {
-    //       for(let city of data) {
-    //         let found = false;
-    //         let contactRoleId = city.Id;
-    //         let sponsorId;
-
-
-    //         for(let sponsor of this.sponsors) {
-    //           if(sponsor && sponsor.Contact__r && city && city.Account__r && sponsor.Contact__r.City__c == city.Account__r.City__c) {
-    //             found = true;
-    //             sponsorId = sponsor.Id;
-    //           }
-    //         }
-    //         if(found && !city.sponsor) {
-    //           this.revokeSponsorResolution(sponsorId);
-    //         } else if(!found && city.sponsor) {
-    //           this.sponsorResolution(contactRoleId);
-    //         }
-    //       }
-    //     }
-    //   });
-
-    // } else if(this.verifiedcontact && this.verifiedcontact.Contact_Roles__r && this.verifiedcontact.Contact_Roles__r.totalSize == 1) {
-    //   if(applySpnsorship) {
-    //     this.sponsorResolution(this.verifiedcontact.Contact_Roles__r.records[0].Id);
-    //   } else {
-    //     this.revokeSponsorResolution(this.sponsors[0].Id);
-    //   }
-    // } 
   }
 
 
@@ -303,44 +427,27 @@ export class ResolutionsDetailPage implements OnInit {
    * determine how the current user should vote
    */
   postVote(vote: string) {
+
     if(this.votes[0].voteId) {
-      this.voteNo(this.verifiedcontact.Contact_Roles__r.records[0].Account__r.Id, vote, this.votes[0].voteId);
+      for(let con of this.verifiedcontact.Contact_Roles__r.records) {
+        if(con.Id == this.selVerifiedContact) {
+          this.voteNo(con.Account__r.Id, vote, this.votes[0].voteId);
+        }
+        // this.voteNo(this.verifiedcontact.Contact_Roles__r.records[0].Account__r.Id, vote, this.votes[0].voteId);
+      }
+      
     } else {
-      this.voteNo(this.verifiedcontact.Contact_Roles__r.records[0].Account__r.Id, vote, null);
+
+      for(let con of this.verifiedcontact.Contact_Roles__r.records) {
+        if(con.Id == this.selVerifiedContact) {
+          this.voteNo(con.Account__r.Id, vote, null);
+        }
+      }
+      
+      // this.voteNo(this.verifiedcontact.Contact_Roles__r.records[0].Account__r.Id, vote, null);
     }
+    
 
-    // // if multiple contact roles, present modal
-    // if(this.verifiedcontact && this.verifiedcontact.Contact_Roles__r && this.verifiedcontact.Contact_Roles__r.totalSize > 1) {
-    //   let cityModal = this.modalCtrl.create(CityModalPage, { verifiedcontact: this.verifiedcontact, votes: this.votes, title : 'Voting', meeting: this.meeting });
-    //   cityModal.present();
-
-    //   cityModal.onDidDismiss(data => {
-    //     if(data) {
-    //       for(let city of data) {
-    //         for(let vote of this.votes) {
-    //           if(vote.cityName == city.Account__r.City__c) {
-    //             if(city.vote && (!vote.vote || vote.vote == 'Revoked')) {
-    //               if(vote && vote.voteId) {
-    //                 this.voteNo(city.Account__r.Id, 'No', vote.voteId);
-    //               } else {
-    //                 this.voteNo(city.Account__r.Id, 'No', null);
-    //               }
-    //             } else if(!city.vote && (vote.vote && vote.vote == 'No')) {
-    //               this.voteNo(city.Account__r.Id, 'Revoked', vote.voteId);
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   });
-
-    // } else if(this.verifiedcontact && this.verifiedcontact.Contact_Roles__r && this.verifiedcontact.Contact_Roles__r.totalSize == 1) {
-    //   if(this.votes[0].voteId) {
-    //     this.voteNo(this.verifiedcontact.Contact_Roles__r.records[0].Account__r.Id, vote, this.votes[0].voteId);
-    //   } else {
-    //     this.voteNo(this.verifiedcontact.Contact_Roles__r.records[0].Account__r.Id, vote, null);
-    //   }
-    // } 
   }
 
   goToMayorDetail(mayor: any) {
@@ -384,13 +491,11 @@ export class ResolutionsDetailPage implements OnInit {
         body: body,
         isHtml: true
     };
-    // this.emailComposer.open(email);
+    this.emailComposer.open(email);
   }
 
 
   goToSession(session: any) {
-    console.log('### session: ' + JSON.stringify(session));
-
     let state = { sessionId: session.Session__c, meeting : this.meeting } ;
     let navigationExtras: NavigationExtras = { state: state };
     this.router.navigate(['/tabs/tabs/meetings/session/' + session.Id], navigationExtras);

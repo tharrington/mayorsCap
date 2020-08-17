@@ -29,6 +29,7 @@ export class ResolutionCategoriesPage implements OnInit {
     private router           : Router,
     private activatedRoute   : ActivatedRoute,
   ) {
+
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.meeting = this.router.getCurrentNavigation().extras.state.meeting;
@@ -36,19 +37,20 @@ export class ResolutionCategoriesPage implements OnInit {
     });
   }
 
-  handleResolutions(resolutions: any[]) {
+  handleResolutions(resolutions) {
     this.resolutions = resolutions;
     this.categories = [];
     let categories = [];
+    this.categories = [];
 
-    console.log('### resolution: ' + JSON.stringify(resolutions[0]));
-
-    
-    for(let resolution of resolutions) {
-      if(resolution.Event__c == this.meeting.Id) {
-        categories.push(resolution.Category__c);
+    if(resolutions && resolutions.length > 0) {
+      for(let resolution of resolutions) {
+        if(resolution.Event__c == this.meeting.Id) {
+          categories.push(resolution.Category__c);
+        }
       }
     }
+    
     this.categories = this.unique(categories).sort();
   }
 
@@ -64,7 +66,7 @@ export class ResolutionCategoriesPage implements OnInit {
   ngOnInit() {
     this.loadResolutions();
 
-    this.mayorData.querySf('resolutions', 'GET', false, null).then((resolutions) => {
+    this.mayorData.querySf('resolutions', 'GET', true, null).then((resolutions) => {
       Storage.set({ key: 'resolutions', value : JSON.stringify(resolutions) });
       this.handleResolutions(resolutions);
     }, (err) => {

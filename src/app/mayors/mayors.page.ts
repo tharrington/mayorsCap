@@ -43,13 +43,13 @@ export class MayorsPage implements OnInit {
     this.loadStoredLeadership();
     this.loadStoredMayors();
 
-    this.mayorData.querySf('meetthemayors', 'GET', false, null).then(mayors => {
+    this.mayorData.querySf('meetthemayors', 'GET', true, null).then(mayors => {
       Storage.set({ key : 'mayors', value : JSON.stringify(mayors) });
       console.log('### mayors 0: ' + JSON.stringify(mayors[0]));
       this.handleAllMayorData(mayors);
     });
 
-    this.mayorData.querySf('leadership', 'GET', false, null).then(leadership => {
+    this.mayorData.querySf('leadership', 'GET', true, null).then(leadership => {
       Storage.set({ key : 'leadership', value : JSON.stringify(leadership) });
       this.leadership = this.formatMayors(leadership);
       this.leadershipSegments = this.breakupSegments(leadership);

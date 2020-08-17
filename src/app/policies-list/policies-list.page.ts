@@ -56,7 +56,14 @@ export class PoliciesListPage implements OnInit {
     this.policies = [];
     for(let policy of this.allPolicies) {
       if(policy && policy.Event__r) {
-        let meetingName = policy.Event__r.Name + ' (' + moment(policy.Event__r.Start_Date__c).format('YYYY') + ') ' + policy.Event__r.Host_City__r.City__c;
+
+        let meetingName;
+
+        if(policy.Event__r && policy.Event__r.Host_City__r) {
+          meetingName = policy.Event__r.Name + ' (' + moment(policy.Event__r.Start_Date__c).format('YYYY') + ') ' + policy.Event__r.Host_City__r.City__c;
+        } else {
+          meetingName = policy.Event__r.Name + ' (' + moment(policy.Event__r.Start_Date__c).format('YYYY') + ') ';
+        } 
 
         if(meetingName == this.meeting) {
           this.policies.push(policy);

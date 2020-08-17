@@ -32,34 +32,38 @@
 
   <ion-list>
 
-    <ion-item *ngIf="isVerifiedContact && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize == 1 && votes && votes.length > 0 && votes[0].vote =='No'" (click)="postVote('Revoked');">
+    <!-- && (showVotingButton || showSponsorship)-->
+    <ion-item-divider sticky *ngIf="verifiedcontact && verifiedcontact.Contact_Roles__r.totalSize > 1 && (sponsorOpen || votingOpen)" style="background-color: transparent;"> 
+      <ion-label >
+        <ion-button expand="block" (click)="openPicker()">Acting As : {{selVerifiedContactDisplayName}} <ion-icon slot="end" name="caret-down-outline"></ion-icon></ion-button>
+      </ion-label>
+    </ion-item-divider>
+
+
+    <ion-item *ngIf="showVotingButton &&  votes && votes.length > 0 && votes[0].vote =='No'" (click)="postVote('Revoked');">
       <ion-icon slot="end" name="remove-circle" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Revoke</ion-label>
+      <ion-label>Revoke Vote</ion-label>
     </ion-item>
 
-    <ion-item *ngIf="isVerifiedContact && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize == 1 && votes && votes.length > 0 && (!votes[0].vote || votes[0].vote=='Revoked')" (click)="postVote('No');">
+    <ion-item *ngIf="showVotingButton && votes && votes.length > 0 && (!votes[0].vote || votes[0].vote=='Revoked')" (click)="postVote('No');">
       <ion-icon slot="end" name="close-circle-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
       <ion-label>Vote No</ion-label>
     </ion-item>
 
-    <ion-item *ngIf="isVerifiedContact && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize > 1" (click)="postVote('No');">
+   <ion-item *ngIf="showVotingButton && votes && votes.length == 0" (click)="postVote('No');">
       <ion-icon slot="end" name="flag" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Voting</ion-label>
-    </ion-item>
-
-    <ion-item *ngIf="isVerifiedContact && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize == 1 && sponsors && sponsors.length == 0" (click)="postSponsor(true);">
-      <ion-icon slot="end" name="create-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Sponsor 1</ion-label>
+      <ion-label>Vote No</ion-label>
     </ion-item>
 
 
-    <ion-item *ngIf="isVerifiedContact && verifiedcontact.Contact_Roles__r.totalSize == 1 && sponsors && sponsors.length > 0" (click)="postSponsor(false);">
+
+    <ion-item *ngIf="showSponsorship && sponsors && sponsors.length > 0" (click)="postSponsor(false);">
       <ion-icon slot="end" name="create" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Revoke</ion-label>
+      <ion-label>Revoke Sponsor</ion-label>
     </ion-item>
-    <ion-item *ngIf="isVerifiedContact  && showVotingButton && verifiedcontact.Contact_Roles__r.totalSize > 1" (click)="postSponsor(false);">
+    <ion-item *ngIf="showSponsorship && sponsors && sponsors.length == 0" (click)="postSponsor(false);">
       <ion-icon slot="end" name="create" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Sponsor 2</ion-label>
+      <ion-label>Sponsor</ion-label>
     </ion-item>   
   </ion-list>
 

@@ -84,10 +84,10 @@ export class MayorDataService {
       if(this.token && auth_required) {
         headers['Authorization'] = 'Bearer ' + this.token;
         headers['x-csrf-token'] = '_csrf';
-        console.log('### auth headers: ' + JSON.stringify(headers));
       } else if(!this.token && auth_required) {
         
       }
+
 
       let response;
       if(method === 'GET') {
@@ -102,7 +102,7 @@ export class MayorDataService {
         endpoint = endpoint + '/' + body;
         response = await this.nativeHttp.delete(endpoint, params, headers);
       }
-
+      console.log('#########################################');
       return JSON.parse(response.data);
     } catch (error) {
       console.error('### err status: ' + error.status);

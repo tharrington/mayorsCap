@@ -97,7 +97,7 @@ export class MeetingDetailPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    console.log('### meeting detail init...');
+
     this.mayorData.findToken();
 
     this.loadSelectedMeetingId();
@@ -139,8 +139,11 @@ export class MeetingDetailPage implements OnInit {
           this.handleSessions(sessions['sessions']); 
           this.handleEnrollments();
         }
+      }).catch(err => {
+        console.log('### error in segments');
       });
     }).catch(err => {
+      console.log('### error in events2');
     });
   }
  
@@ -219,7 +222,6 @@ export class MeetingDetailPage implements OnInit {
       } while(total_days > 0);
       this.meeting_dates = dates;
       this.display_dates = display_dates;
-      console.log('### display_dates: ' + JSON.stringify(display_dates));
 
       if(this.meeting_dates && this.meeting_dates.length > 0) {
 
