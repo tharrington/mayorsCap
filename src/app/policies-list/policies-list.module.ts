@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { PoliciesListPageRoutingModule } from './policies-list-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { PoliciesListPage } from './policies-list.page';
 
@@ -13,7 +14,8 @@ import { PoliciesListPage } from './policies-list.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    PoliciesListPageRoutingModule
+    PoliciesListPageRoutingModule,
+    SharedModule
   ],
   declarations: [PoliciesListPage]
 })

@@ -18,6 +18,8 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
+import { SharedModule } from './shared/shared.module';
+
 @NgModule({
   declarations: [AppComponent, SearchPipe],
   entryComponents: [],
@@ -25,7 +27,8 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
     BrowserModule, 
     HttpClientModule,
     IonicModule.forRoot(), 
-    AppRoutingModule
+    AppRoutingModule,
+    SharedModule
   ],
   providers: [
     StatusBar,

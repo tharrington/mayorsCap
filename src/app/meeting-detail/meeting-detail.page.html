@@ -1,18 +1,9 @@
-<ion-header>
-  <ion-toolbar align-title=“center”>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="changeMeeting()">
-        <ion-icon slot="icon-only" name="calendar-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons> 
-    <ion-title size="small">{{meeting.Name}}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<app-header
+  (onClick)="changeMeeting()"
+  [defaultHref]="''"
+  [icon]="'calendar-outline'"
+  [title]="meeting.Name">
+</app-header>
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

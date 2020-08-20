@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { SponsorsPageRoutingModule } from './sponsors-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { SponsorsPage } from './sponsors.page';
 
@@ -13,7 +14,8 @@ import { SponsorsPage } from './sponsors.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    SponsorsPageRoutingModule
+    SponsorsPageRoutingModule,
+    SharedModule
   ],
   declarations: [SponsorsPage]
 })

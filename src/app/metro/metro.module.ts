@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MetroPageRoutingModule } from './metro-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { MetroPage } from './metro.page';
 
@@ -13,7 +14,8 @@ import { MetroPage } from './metro.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    MetroPageRoutingModule
+    MetroPageRoutingModule,
+    SharedModule
   ],
   declarations: [MetroPage]
 })

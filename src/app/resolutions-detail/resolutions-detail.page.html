@@ -1,23 +1,11 @@
 
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-
-    <ion-buttons slot="end">
-
-      <ion-button (click)="mailResolution();">
-        <ion-icon slot="icon-only" name="mail-outline"></ion-icon>
-      </ion-button>
-
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-action-icon-header
+  (onClick)="mailResolution()"
+  [actionIcon]="'mail-outline'"
+  [defaultHref]="'/tabs/tabs/meetings/resolutions'"
+></app-action-icon-header>
 
 <ion-content>
-
-
 
   <ion-list>
     <ion-item>

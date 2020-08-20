@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AssistancePageRoutingModule } from './assistance-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { AssistancePage } from './assistance.page';
 
@@ -13,7 +14,8 @@ import { AssistancePage } from './assistance.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AssistancePageRoutingModule
+    AssistancePageRoutingModule,
+    SharedModule
   ],
   declarations: [AssistancePage]
 })

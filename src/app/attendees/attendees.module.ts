@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AttendeesPageRoutingModule } from './attendees-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { AttendeesPage } from './attendees.page';
 
@@ -13,7 +14,8 @@ import { AttendeesPage } from './attendees.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AttendeesPageRoutingModule
+    AttendeesPageRoutingModule,
+    SharedModule
   ],
   declarations: [AttendeesPage]
 })

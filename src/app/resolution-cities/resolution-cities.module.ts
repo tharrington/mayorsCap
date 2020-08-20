@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ResolutionCitiesPageRoutingModule } from './resolution-cities-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { ResolutionCitiesPage } from './resolution-cities.page';
 
@@ -13,7 +14,8 @@ import { ResolutionCitiesPage } from './resolution-cities.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ResolutionCitiesPageRoutingModule
+    ResolutionCitiesPageRoutingModule,
+    SharedModule
   ],
   declarations: [ResolutionCitiesPage]
 })

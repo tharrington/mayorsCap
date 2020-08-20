@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AgendaPageRoutingModule } from './agenda-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { AgendaPage } from './agenda.page';
 
@@ -13,7 +14,8 @@ import { AgendaPage } from './agenda.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AgendaPageRoutingModule
+    AgendaPageRoutingModule,
+    SharedModule
   ],
   declarations: [AgendaPage]
 })

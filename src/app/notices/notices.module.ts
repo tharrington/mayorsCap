@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NoticesPageRoutingModule } from './notices-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { NoticesPage } from './notices.page';
 
@@ -13,7 +14,8 @@ import { NoticesPage } from './notices.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    NoticesPageRoutingModule
+    NoticesPageRoutingModule,
+    SharedModule
   ],
   declarations: [NoticesPage]
 })

@@ -1,18 +1,10 @@
 
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="primary">
-      <ion-button (click)="openProfile()">
-        <ion-icon slot="icon-only" name="cog-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons> 
-    <ion-title size="small">Home</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-
-
-
+<app-header
+  (onClick)="openProfile()"
+  [defaultHref]="''"
+  [icon]="'cog-outline'"
+  [title]="'Home'">
+</app-header>
 
 <ion-content>
 
