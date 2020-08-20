@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NewsPageRoutingModule } from './news-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { NewsPage } from './news.page';
 
@@ -13,7 +14,8 @@ import { NewsPage } from './news.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    NewsPageRoutingModule
+    NewsPageRoutingModule,
+    SharedModule 
   ],
   declarations: [NewsPage]
 })

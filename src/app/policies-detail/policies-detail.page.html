@@ -1,18 +1,9 @@
 
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-
-    <ion-buttons slot="primary">
-      <ion-button (click)="sharePolicy()">
-        <ion-icon slot="icon-only" name="share-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons> 
-
-  </ion-toolbar>
-</ion-header>
+<app-action-icon-header
+  (onClick)="sharePolicy()"
+  [actionIcon]="'share-outline'"
+  [defaultHref]="'/tabs/tabs/policies/policy-list'"
+></app-action-icon-header>
 
 <ion-content>
 

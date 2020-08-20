@@ -1,0 +1,11 @@
+<ion-header>
+  <ion-toolbar [ngClass]="{'android-background-color': isAndroid}">
+    <ion-buttons slot="start">
+      <ion-back-button text="" [defaultHref]="defaultHref" [ngClass]="{'android-color': isAndroid}"></ion-back-button>
+    </ion-buttons>
+    <ion-title size="small" [ngClass]="{'android-color': isAndroid}">{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="click()" [ngClass]="{'android-color': isAndroid}">{{actionTitle}}</ion-button >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

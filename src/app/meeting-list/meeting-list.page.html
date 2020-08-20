@@ -1,12 +1,4 @@
-
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title size="small">Meetings</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-sub-header [title]="'Meetings'" [defaultHref]="'/tabs/tabs/meetings'"></app-sub-header>
 
 <ion-content>
 
@@ -15,7 +7,6 @@
       <ion-title size="large">Meetings</ion-title>
     </ion-toolbar>
   </ion-header>
-
 
   <ion-list>
     <ng-container *ngFor="let meeting of meetings">

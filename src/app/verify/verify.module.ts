@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { VerifyPageRoutingModule } from './verify-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { VerifyPage } from './verify.page';
 
@@ -13,7 +14,8 @@ import { VerifyPage } from './verify.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    VerifyPageRoutingModule
+    VerifyPageRoutingModule,
+    SharedModule
   ],
   declarations: [VerifyPage]
 })

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MayorsUpdateDetailPageRoutingModule } from './mayors-update-detail-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { MayorsUpdateDetailPage } from './mayors-update-detail.page';
 
@@ -13,7 +14,8 @@ import { MayorsUpdateDetailPage } from './mayors-update-detail.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    MayorsUpdateDetailPageRoutingModule
+    MayorsUpdateDetailPageRoutingModule,
+    SharedModule
   ],
   declarations: [MayorsUpdateDetailPage]
 })

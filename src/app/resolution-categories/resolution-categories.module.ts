@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ResolutionCategoriesPageRoutingModule } from './resolution-categories-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { ResolutionCategoriesPage } from './resolution-categories.page';
 
@@ -13,7 +14,8 @@ import { ResolutionCategoriesPage } from './resolution-categories.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ResolutionCategoriesPageRoutingModule
+    ResolutionCategoriesPageRoutingModule,
+    SharedModule
   ],
   declarations: [ResolutionCategoriesPage]
 })

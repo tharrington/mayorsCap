@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { SessionsDetailPageRoutingModule } from './sessions-detail-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { SessionsDetailPage } from './sessions-detail.page';
 
@@ -13,7 +14,8 @@ import { SessionsDetailPage } from './sessions-detail.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    SessionsDetailPageRoutingModule
+    SessionsDetailPageRoutingModule,
+    SharedModule
   ],
   declarations: [SessionsDetailPage]
 })

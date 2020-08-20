@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ActivitiesDetailPageRoutingModule } from './activities-detail-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { ActivitiesDetailPage } from './activities-detail.page';
 
@@ -13,7 +14,8 @@ import { ActivitiesDetailPage } from './activities-detail.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ActivitiesDetailPageRoutingModule
+    ActivitiesDetailPageRoutingModule,
+    SharedModule
   ],
   declarations: [ActivitiesDetailPage]
 })

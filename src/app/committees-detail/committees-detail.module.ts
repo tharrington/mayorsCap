@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { CommitteesDetailPageRoutingModule } from './committees-detail-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { CommitteesDetailPage } from './committees-detail.page';
 
@@ -13,7 +14,8 @@ import { CommitteesDetailPage } from './committees-detail.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    CommitteesDetailPageRoutingModule
+    CommitteesDetailPageRoutingModule,
+    SharedModule
   ],
   declarations: [CommitteesDetailPage]
 })
