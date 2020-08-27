@@ -78,7 +78,6 @@ export class SessionsDetailPage implements OnInit {
     if(this.session && this.session.Session_Segments__r) {
       this.segments = this.session.Session_Segments__r.records;
     }
-    console.log('### session: ' + JSON.stringify(this.session));
   }
 
 
@@ -96,6 +95,7 @@ export class SessionsDetailPage implements OnInit {
       mayorName.Contact = mayorName.Contact__r;
     }
     let state = { mayor: mayorName } ;
+    console.log('### going to mayor: ' + JSON.stringify(state));
     let navigationExtras: NavigationExtras = { state: state };
     this.router.navigate(['/tabs/tabs/meetings/mayors/' + mayorName.Id], navigationExtras); 
 

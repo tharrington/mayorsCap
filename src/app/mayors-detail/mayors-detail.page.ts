@@ -30,7 +30,12 @@ export class MayorsDetailPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.mayorData.querySf('contacts/' + this.mayor.Contact.Id, 'GET', false, null).then((con) => {
+    console.log('### mayor: ' + 'contacts/' + this.mayor.Contact.Id);
+    this.mayorData.querySf('contacts/' + this.mayor.Contact.Id, 'GET', true, null).then((con) => {
+
+      console.log('### con: ' + JSON.stringify(con));
+
+
       if(con && con.length > 0) {
         this.mayor.Contact__r = con[0];    
         this.mayor.Contact = con[0];    
@@ -38,7 +43,7 @@ export class MayorsDetailPage implements OnInit {
     }, err => {
     });
 
-    this.mayorData.querySf('contacts', 'GET', false, null).then((contacts) => {
+    this.mayorData.querySf('contacts', 'GET', true, null).then((contacts) => {
       this.findContact(contacts);
       this.doGeocode();
     }, err => {

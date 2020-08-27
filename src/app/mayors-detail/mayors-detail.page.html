@@ -25,7 +25,8 @@
       About
     </ion-item-divider>
 
-    <ion-item *ngIf="mayor && mayor.Contact && (mayor.Tab__c == 'Speakers & Guests' || !mayor.Contact.Next_General_Election__c)">
+    <!-- <ion-item *ngIf="mayor && mayor.Contact && (mayor.Tab__c == 'Speakers & Guests' || !mayor.Contact.Next_General_Election__c)"> -->
+    <ion-item *ngIf="mayor && mayor.Contact && mayor.Type__c == 'Presiding'">
       <ion-label>
         <h2 class="ion-text-wrap">
           <span class="richText open-browser" [innerHTML]="mayor.Contact.Content__c"></span>
