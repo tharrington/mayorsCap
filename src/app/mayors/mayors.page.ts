@@ -45,7 +45,6 @@ export class MayorsPage implements OnInit {
 
     this.mayorData.querySf('meetthemayors', 'GET', true, null).then(mayors => {
       Storage.set({ key : 'mayors', value : JSON.stringify(mayors) });
-      console.log('### mayors 0: ' + JSON.stringify(mayors[0]));
       this.handleAllMayorData(mayors);
     });
 
@@ -90,11 +89,14 @@ export class MayorsPage implements OnInit {
    * Format Mayors Helper
    */
   formatMayors(mayors ) {
-    mayors.forEach(function(mayor) {
-      if(mayor.Contact__r) {
-        mayor.Contact = mayor.Contact__r;
-      }
-    });
+    if(mayors && mayors.length > 0) {
+      mayors.forEach(function(mayor) {
+        if(mayor.Contact__r) {
+          mayor.Contact = mayor.Contact__r;
+        }
+      });
+    }
+    
     return mayors;
   }
 
