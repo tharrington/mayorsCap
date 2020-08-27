@@ -4,3 +4,8 @@
 .android-color {
   --color: var(--ion-color-primary-contrast);
 }
+
+ion-back-button {
+  --padding-start	: 15px;
+  --padding-end	: 15px;
+}
