@@ -133,7 +133,7 @@ export class MeetingDetailPage implements OnInit {
     // Show us the notification payload if the app is open on our device
     PushNotifications.addListener('pushNotificationReceived',
         (notification: PushNotification) => {
-          alert(JSON.stringify(notification));
+          alert(JSON.stringify(notification.body));
         }
     );
 
