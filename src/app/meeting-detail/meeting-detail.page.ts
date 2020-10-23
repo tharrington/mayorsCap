@@ -126,21 +126,24 @@ export class MeetingDetailPage implements OnInit {
     // Some issue with our setup and push will not work
     PushNotifications.addListener('registrationError',
         (error: any) => {
-          alert(JSON.stringify(error));
+          // alert(JSON.stringify(error));
         }
     );
 
     // Show us the notification payload if the app is open on our device
     PushNotifications.addListener('pushNotificationReceived',
         (notification: PushNotification) => {
-          alert(JSON.stringify(notification.body));
+          // alert(JSON.stringify(notification.body));
         }
     );
 
     // Method called when tapping on a notification
     PushNotifications.addListener('pushNotificationActionPerformed',
         (notification: PushNotificationActionPerformed) => {
-          alert(JSON.stringify(notification));
+          // alert(JSON.stringify(notification));
+          // let state = { meeting : this.meeting } ;
+          let navigationExtras: NavigationExtras = { };
+          this.router.navigate(['/tabs/tabs/home'], navigationExtras);
         }
     );
   }
@@ -161,7 +164,7 @@ export class MeetingDetailPage implements OnInit {
    */
   changeMeeting() {
     let state = { meetings : this.meetings } ;
-    let navigationExtras: NavigationExtras = { state: state };    
+    let navigationExtras: NavigationExtras = { state: state };
     this.router.navigate(['/tabs/tabs/meetings/list'], navigationExtras);
   }
 

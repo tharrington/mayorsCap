@@ -293,9 +293,8 @@ export class HomePage implements OnInit {
 
 
   goToNotifications() {
-    // this.navCtrl.push(NotificationListPage, {
-    //   notifications : this.notifications
-    // });
+    let navigationExtras: NavigationExtras = { state: { notifications: this.notifications } };
+    this.router.navigate(['/tabs/tabs/home/notifications'], navigationExtras);
   }
 
   goToMyAgenda() {

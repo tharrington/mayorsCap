@@ -57,6 +57,8 @@ const routes: Routes = [
           { path : '', loadChildren: () => import('../home/home.module').then(m => m.HomePageModule) },
           { path : 'profile', loadChildren: () => import('../profile/profile.module').then( m => m.ProfilePageModule) },
           { path : 'verify', loadChildren: () => import('../verify/verify.module').then( m => m.VerifyPageModule) },
+          { path : 'notifications', loadChildren: () => import('../notifications/notifications.module').then( m => m.NotificationsPageModule) },
+          { path : 'notifications/:id', loadChildren: () => import('../notifications-detail/notifications-detail.module').then( m => m.NotificationsDetailPageModule) },
           { path : 'mayors-update', loadChildren: () => import('../mayors-update/mayors-update.module').then( m => m.MayorsUpdatePageModule) },
           { path : 'mayors-update/:id', loadChildren: () => import('../mayors-update-detail/mayors-update-detail.module').then( m => m.MayorsUpdateDetailPageModule) },
         ] 
