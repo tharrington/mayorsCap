@@ -6,8 +6,8 @@ android {
         applicationId "org.usmayors.eventapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 210
-        versionName "4.0.2"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -44,6 +44,3 @@ try {
 } catch(Exception e) {
     logger.warn("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }
-
-android.defaultConfig.manifestPlaceholders = ['appAuthRedirectScheme': 'org.usmayors.eventapp']
-

@@ -21,17 +21,6 @@ uscm2020
 
 /Users/tylerharrington/Library/Android/sdk/build-tools/27.0.3/zipalign -v 4 ./platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk ./platforms/android/app/build/outputs/apk/release/uscm.apk
 
-
-<key>NSCalendarsUsageDescription</key>
-<string>To add sessions to your calendar.</string>
-<key>NSCameraUsageDescription</key>
-<string>To upload photos for your profile.</string>
-<key>NSLocationWhenInUseUsageDescription</key>
-<string/>
-<key>NSMainNibFile</key>
-<string/>
-<key>NSPhotoLibraryUsageDescription</key>
-<string>To upload photos to your profile.</string>
 */
 
 @Component({

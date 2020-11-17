@@ -3,3 +3,10 @@
   font-size: 15px !important; 
 }
 
+/* Fallback for older browsers or manual mode */
+body.dark {
+  /* Dark mode variables go here */
+  .richText {
+    color: white !important;
+  }
+}
