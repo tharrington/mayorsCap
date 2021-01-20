@@ -9,6 +9,6 @@
         <ion-icon slot="icon-only" [name]="icon"></ion-icon>
       </ion-button>
     </ion-buttons> 
-    <ion-title size="small" [ngClass]="{'android-color': isAndroid}">{{title}}</ion-title>
+    <ion-title size="small" [ngClass]="{'android-color': isAndroid, 'iosCssClass': !isAndroid}">{{title}}</ion-title>
   </ion-toolbar>
 </ion-header>
