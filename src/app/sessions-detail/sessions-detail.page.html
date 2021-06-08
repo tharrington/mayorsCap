@@ -130,5 +130,19 @@
         </ion-label>
       </ion-item>
     </ng-container>
+
+    <ng-container *ngIf="links && links.length > 0">
+      <ion-list-header>
+        <ion-label>Links</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let link of links; let i = index" (click)="goToLink(link)" >
+        <ion-icon name={{link.Icon_Name__c}} slot="end"></ion-icon>
+
+        <ion-label>
+          <h2 class="ion-text-wrap">{{link.Name}}</h2>
+        </ion-label>
+      </ion-item>
+    </ng-container>
   </ion-list>
 </ion-content>

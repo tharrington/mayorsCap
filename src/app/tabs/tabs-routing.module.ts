@@ -27,6 +27,7 @@ const routes: Routes = [
           { path : 'resolution-categories', loadChildren: () => import('../resolution-categories/resolution-categories.module').then(m => m.ResolutionCategoriesPageModule) },
           { path : 'activities', loadChildren: () => import('../activities-list/activities-list.module').then(m => m.ActivitiesListPageModule) },
           { path : 'activities/:id', loadChildren: () => import('../activities-detail/activities-detail.module').then(m => m.ActivitiesDetailPageModule) },
+          { path : 'links', loadChildren: () => import('../links/links.module').then(m => m.LinksPageModule) },
         ] 
       },
       { 

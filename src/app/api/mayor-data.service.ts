@@ -88,8 +88,6 @@ export class MayorDataService {
         
       }
 
-      console.log('### token: ' + JSON.stringify(this.token));
-
       let response;
       if(method === 'GET') {
         response = await this.nativeHttp.get(endpoint, params, headers);
@@ -146,7 +144,6 @@ export class MayorDataService {
 
 
   refreshToken(refresh_token : string, object: string, method: string, auth_required : boolean, body : any) {
-    console.log('### refreh token...');
     var appId = this.getAppId();
     let endpoint = this.getRefreshBaseURL();
     let token_body = {
@@ -154,7 +151,6 @@ export class MayorDataService {
       client_id : appId, 
       refresh_token : refresh_token
     };
-    console.log('### refreshing token: ' + JSON.stringify(token_body));
 
     this.nativeHttp.setDataSerializer('urlencoded');
 
@@ -162,7 +158,6 @@ export class MayorDataService {
       .then(data => {
         let new_token = JSON.parse(data.data);
         new_token.refresh_token = refresh_token;
-        console.log('### got new_token: ' + JSON.stringify(new_token));
         Storage.set({ key : 'token', value : JSON.stringify(new_token) });
 
 

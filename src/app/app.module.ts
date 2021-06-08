@@ -21,7 +21,7 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, SearchPipe],
+  declarations: [AppComponent, SearchPipe ],
   entryComponents: [],
   imports: [
     BrowserModule, 

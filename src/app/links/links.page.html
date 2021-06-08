@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title size="small">Links</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Links</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ng-container *ngFor="let link of links">
+      <ion-item (click)="openLink(link);"  tappable>
+
+          <ion-icon name={{link.Icon_Name__c}} slot="end"></ion-icon>
+
+        <ion-label>
+          <h2 class="ion-text-wrap">{{link.Name}}</h2>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>

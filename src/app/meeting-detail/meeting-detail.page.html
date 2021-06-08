@@ -60,9 +60,16 @@
       <ion-label>Notices</ion-label>
     </ion-item>
 
+
     <ion-item (click)="goToPage('Assistance')">
       <ion-icon slot="end" name="help-circle-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
       <ion-label>Assistance</ion-label>
+    </ion-item>
+
+
+    <ion-item (click)="goToPage('Links')">
+      <ion-icon slot="end" name="link-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Links</ion-label>
     </ion-item>
   </ion-list> 
  

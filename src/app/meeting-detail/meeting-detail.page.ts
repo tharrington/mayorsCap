@@ -35,6 +35,7 @@ export class MeetingDetailPage implements OnInit {
   selected_date: string;
   searching  = false;
   has_changed_tab = false;
+  links = [];
 
   searchTerm = '';
   slideHeaderPrevious = 0;
@@ -181,6 +182,7 @@ export class MeetingDetailPage implements OnInit {
   getSessionDetails() {
     this.mayorData.querySf('events2', 'GET', true, null).then((meetings) => { 
       this.meetings = meetings;
+
       Storage.set({ key: 'events2', value : JSON.stringify(meetings) });
       this.handleMeetings(meetings); 
       this.mayorData.querySf('segments', 'GET', true, null).then((sessions) => {
@@ -190,6 +192,7 @@ export class MeetingDetailPage implements OnInit {
           this.segments = sessions['segments'];
           this.handleSessions(sessions['sessions']); 
           this.handleEnrollments();
+
         }
       }).catch(err => {
         console.log('### error in segments');
@@ -260,6 +263,8 @@ export class MeetingDetailPage implements OnInit {
   handleMeeting(meeting: any) {
     this.meeting = meeting;
 
+    console.log('### meeting: ' + JSON.stringify((meeting)));
+
     if(this.meeting && this.meeting.Start_Date__c) {
       let start_date = moment(this.meeting.Start_Date__c);  
       let total_days= this.meeting.Number_of_Days__c; 
@@ -301,19 +306,23 @@ export class MeetingDetailPage implements OnInit {
    * Handle all meetings
    */
   handleMeetings(meetings) {
+
     if(meetings) {
+      this.links = [];
       for (let meeting of meetings) {
 
         if(this.meeting_id) {
           if(this.meeting_id == meeting.Id) {
             Storage.set({ key : 'meeting', value : JSON.stringify(meeting) });
             this.handleMeeting(meeting);
+            this.links = meeting.LWEV_Links__r;
             break;
           }
         } else {
           if(meeting.Default_Event_in_Mobile_App__c) {
             Storage.set({ key : 'meeting', value : JSON.stringify(meeting) });
             this.handleMeeting(meeting);
+            this.links = meeting.LWEV_Links__r;
             break;
           }
         }
@@ -429,6 +438,7 @@ export class MeetingDetailPage implements OnInit {
    * Navigate to pill page
    */
   goToPage(page : string) {
+    console.log('### meeting: ' + JSON.stringify((this.meeting)));
     if(page == 'Attendees') {
       let state = { meeting : this.meeting } ;
       let navigationExtras: NavigationExtras = { state: state };
@@ -457,6 +467,11 @@ export class MeetingDetailPage implements OnInit {
       let state = { meeting : this.meeting } ;
       let navigationExtras: NavigationExtras = { state: state };
       this.router.navigate(['/tabs/tabs/meetings/assistance'], navigationExtras);
+
+    } else if(page == 'Links') {
+      let state = { meeting : this.meeting, links: this.links } ;
+      let navigationExtras: NavigationExtras = { state: state };
+      this.router.navigate(['/tabs/tabs/meetings/links'], navigationExtras);
     } else if(page == 'Agenda') {
       const state = { 
         meeting: this.meeting
