@@ -262,6 +262,12 @@ export class MeetingDetailPage implements OnInit {
     return formatted_date.format('MM/DD/YYYY');
   }
 
+  formatDateMeeting(dateString: string) {
+    let formatted_date = moment(dateString);
+    return formatted_date.format('MMM Do');
+  }
+
+
   /**
    * Handle active meetings 
    */

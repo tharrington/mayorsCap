@@ -11,7 +11,7 @@
     <ion-item lines="none" class="ion-text-center">
 
       <ion-label>
-        <h2>{{mayor.Contact.Name}}</h2>
+        <h1>{{mayor.Contact.Name}}</h1>
         <p class="ion-text-wrap" *ngIf="mayor.Contact.City__c && mayor.Contact.State__c">{{mayor.Contact.City__c}}, {{mayor.Contact.State__c}}</p>
         <p class="ion-text-wrap" *ngIf="!(mayor.Contact.City__c && mayor.Contact.State__c)">{{mayor.Contact.Account.Name}}</p>
       </ion-label>

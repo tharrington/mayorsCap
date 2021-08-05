@@ -23,12 +23,9 @@
     <ion-card>
       <img *ngIf="meeting.Banner_Image_URL__c" src="{{meeting.Banner_Image_URL__c}}" />
       <ion-card-header>
-        <ion-card-subtitle>{{formatDate(meeting.Start_Date__c)}}</ion-card-subtitle>
+        <ion-card-subtitle>{{formatDateMeeting(meeting.Start_Date__c)}} - {{formatDateMeeting(meeting.End_Date__c)}}</ion-card-subtitle>
         <ion-card-title>{{meeting.Name}}</ion-card-title>
       </ion-card-header>
-<!--      <ion-card-content>-->
-<!--        Founded in 1829 on an isthmus between Lake Monona and Lake Mendota, Madison was named the capital of the Wisconsin Territory in 1836.-->
-<!--      </ion-card-content>-->
     </ion-card>
     <ion-list-header>
       <ion-label>About The Meeting</ion-label>
@@ -91,8 +88,9 @@
       <ion-label>Meeting Agenda</ion-label>
     </ion-list-header>
 
-    <ion-item-divider sticky *ngIf="display_dates.length > 5 || display_dates.length == 5" style="background-color: inherit;"> 
+    <ion-item-divider sticky *ngIf="display_dates.length > 5 || display_dates.length == 5 && meeting" style="background-color: inherit;">
       <ion-label >
+        <ion-button expand="block" *ngIf="meeting.Primary_Color__c" [color]="meeting.Primary_Color__c" (click)="openPicker()">Date : {{selected_date}} <ion-icon slot="end" name="caret-down-outline"></ion-icon></ion-button>
         <ion-button expand="block" (click)="openPicker()">Date : {{selected_date}} <ion-icon slot="end" name="caret-down-outline"></ion-icon></ion-button>
       </ion-label>
     </ion-item-divider>
@@ -140,23 +138,4 @@
     </ion-item> -->
   </ion-list>
 </ion-content>
-
-
-AND( ISCHANGED(Status) , ISPICKVAL(Status, 'Closed'),
-NOT( RecordType.Name, 'NWC_Customer_Onboarding'),
-NOT( $Setup.BypassExceptions__c.Bypass_Validation_Rule__c ),
-
-OR( ISBLANK( Account.Name ), ISBLANK( Contact.FirstName),
-ISBLANK(Subject),ISBLANK(Description),
-ISBLANK(TEXT(Status)),
-ISBLANK(TEXT(Priority)),
-ISBLANK( OwnerId),ISBLANK(TEXT(Origin)),
-ISBLANK(TEXT(Case_Closure_Reason__c)),
-ISBLANK( TEXT(Case_Source__c)),ISBLANK(TEXT(Type)),
-ISBLANK(TEXT(Product__c)), ISBLANK(Epic_Feature__c),
-ISBLANK(Steps_to_Recreate__c),
-ISBLANK(Root_Cause_Description__c),
-ISBLANK(Solution_Design_Description__c)
-)
-)
 
