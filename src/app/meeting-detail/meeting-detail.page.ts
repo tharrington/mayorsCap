@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonContent, IonSearchbar, NavController, PickerController } from '@ionic/angular';
 import { Router, NavigationExtras } from '@angular/router';
-import { PickerOptions } from "@ionic/core";
+import { PickerOptions } from '@ionic/core';
 
 import { SearchPipe } from '../core/search.pipe';
 
@@ -255,6 +255,11 @@ export class MeetingDetailPage implements OnInit {
         }
       }
     }
+  }
+
+  formatDate(dateString: string) {
+    let formatted_date = moment(dateString);
+    return formatted_date.format('MM/DD/YYYY');
   }
 
   /**
