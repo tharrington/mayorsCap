@@ -11,7 +11,7 @@
       </ion-label>
     </ion-item>
 
-    <ng-container *ngFor="let member of committee.Committee_Members__r.records; let i = index">
+    <ng-container *ngFor="let member of members; let i = index">
       <ion-item-divider sticky *ngIf="i==0 || (member.Type_Sort_Order__c != committee.Committee_Members__r.records[i-1].Type_Sort_Order__c)">  
         {{member.Type__c}}
         <span *ngIf="i != committee.Committee_Members__r.length && member.Type_Sort_Order__c == committee.Committee_Members__r.records[i+1].Type_Sort_Order__c">s</span>

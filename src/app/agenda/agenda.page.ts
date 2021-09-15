@@ -173,11 +173,13 @@ export class AgendaPage implements OnInit {
   removeEnrollment(session: any, slidingItem: any) {
     let body = session.Id;
     this.mayorData.querySf('enrollments', 'DELETE', true, body).then((enrollments) => { 
-      this.mayorData.querySf('enrollments', 'GET', true, null).then((enrollments) => { 
+      this.mayorData.querySf('enrollments', 'GET', true, null).then((enrollments) => {
+        console.log('### enrollments: ' + JSON.stringify(enrollments));
         this.enrollments = enrollments;
       });
 
       this.mayorData.querySf('segments', 'GET', true, null).then((sessions) => {
+        console.log('### enrollments 2: ' + JSON.stringify(enrollments));
         this.handleEnrollments();
       });
 

@@ -31,11 +31,8 @@
 
     <ion-item-sliding *ngFor="let session of sessions">
       <ion-item-options side="start" *ngIf="session.Allow_Registration__c" >
-        <ion-item-option color="danger" expandable (click)="removeSessionEnrollment(session, $event);" *ngIf="session.Session_Enrollments__r">
+        <ion-item-option color="danger" expandable (click)="removeEnrollment(session, $event);" *ngIf="session.Session_Enrollments__r">
           Remove
-        </ion-item-option>
-        <ion-item-option color="primary" expandable (click)="addSessionEnrollment(session, $event);" *ngIf="!session.Session_Enrollments__r">
-          Add
         </ion-item-option>
       </ion-item-options>
 

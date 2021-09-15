@@ -21,6 +21,10 @@ uscm2020
 
 /Users/tylerharrington/Library/Android/sdk/build-tools/27.0.3/zipalign -v 4 ./platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk ./platforms/android/app/build/outputs/apk/release/uscm.apk
 
+
+ android sdk:
+
+
 */
 
 @Component({

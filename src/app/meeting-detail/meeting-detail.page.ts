@@ -56,34 +56,51 @@ export class MeetingDetailPage implements OnInit {
   async loadSelectedMeetingId() {
     const { value } = await Storage.get({ key: 'selected_meeting_id' });
     this.meeting_id = value;
-    if(this.meeting.Id != this.meeting_id) {
+    if(this.meeting.Id !== this.meeting_id) {
     }
   }
 
   async loadStoredEvents() {
     const { value } = await Storage.get({ key: 'events2' });
-    if(value) {
-      this.meetings = JSON.parse(value);
-      this.handleMeetings(this.meetings); 
+    if(value && value !== '') {
+      try {
+        this.meetings = JSON.parse(value);
+        this.handleMeetings(this.meetings);
+      } catch (e) {
+        console.log('### exception 71: ' + e);
+      } finally {
+      }
     }
   }
 
   async loadMeeting() {
     const { value } = await Storage.get({ key: 'meeting' });
+    if(value && value !== '') {
+      try {
+        this.handleMeeting(JSON.parse(value));
+      } catch (e) {
+      } finally {
+      }
 
-    if(value) {
-      this.handleMeeting(JSON.parse(value)); 
     }
   }
 
   async loadStoredSegments() {
     const { value } = await Storage.get({ key: 'segments' });
-    let sessions = JSON.parse(value);
-    if(sessions && sessions['sessions'] && sessions['sessions'].length > 0) {
-      this.segments = sessions['segments'];
-      this.handleSessions(sessions['sessions']); 
-      this.handleEnrollments();
+    if(value && value !== '') {
+      try {
+        let sessions = JSON.parse(value);
+        if(sessions && sessions['sessions'] && sessions['sessions'].length > 0) {
+          this.segments = sessions['segments'];
+          this.handleSessions(sessions['sessions']);
+          this.handleEnrollments();
+        }
+      } catch (e) {
+        console.log('### exception 103: ' + e);
+      } finally {
+      }
     }
+
   }
 
   doRefresh(event) {
@@ -95,6 +112,16 @@ export class MeetingDetailPage implements OnInit {
     event.target.complete();
   }
 
+  ionViewDidEnter() {
+    console.log('### view did enter');
+    if(this.meeting && this.meeting.Id) {
+      this.loadSelectedMeetingId();
+      this.loadMeeting();
+      this.loadStoredEvents();
+      this.loadStoredSegments();
+      this.getSessionDetails();
+    }
+  }
 
   ngOnInit() {
     // Request permission to use push notifications
@@ -170,6 +197,9 @@ export class MeetingDetailPage implements OnInit {
   }
 
   clearAllData() {
+    console.log('#################################');
+    console.log('### clear all data');
+    console.log('#################################');
     this.all_sessions = [];
     this.sessions = [];
     this.meeting_dates = [];
@@ -180,7 +210,7 @@ export class MeetingDetailPage implements OnInit {
 
 
   getSessionDetails() {
-    this.mayorData.querySf('events2', 'GET', true, null).then((meetings) => { 
+    this.mayorData.querySf('events2', 'GET', true, null).then((meetings) => {
       this.meetings = meetings;
 
       Storage.set({ key: 'events2', value : JSON.stringify(meetings) });
@@ -195,7 +225,6 @@ export class MeetingDetailPage implements OnInit {
 
         }
       }).catch(err => {
-        console.log('### error in segments');
       });
     }).catch(err => {
       console.log('### error in events2');
@@ -208,13 +237,16 @@ export class MeetingDetailPage implements OnInit {
    */
   async handleEnrollments() {
     const { value } = await Storage.get({ key: 'enrollments' });
-    this.enrollments = JSON.parse(value);
 
-    this.mayorData.querySf('enrollments', 'GET', true, null).then((enrollments) => { 
+    if(value && value !== '') {
+      this.enrollments = JSON.parse(value);
 
-      Storage.set({ key: 'enrollments', value : JSON.stringify(enrollments) });
-      this.enrollments = enrollments;
-    });
+      this.mayorData.querySf('enrollments', 'GET', true, null).then((enrollments) => {
+
+        Storage.set({key: 'enrollments', value: JSON.stringify(enrollments)});
+        this.enrollments = enrollments;
+      });
+    }
   }
 
   /**
@@ -274,7 +306,14 @@ export class MeetingDetailPage implements OnInit {
   handleMeeting(meeting: any) {
     this.meeting = meeting;
 
-    console.log('### meeting: ' + JSON.stringify((meeting)));
+    this.mayorData.querySf('events2/' + this.meeting.Id, 'GET', true, null).then((aMeeting) => {
+
+      if(aMeeting && aMeeting.length > 0 && aMeeting[0].LWEV_Links__r) {
+        this.links = aMeeting[0].LWEV_Links__r.records;
+      }
+    }).catch(err => {
+    });
+
 
     if(this.meeting && this.meeting.Start_Date__c) {
       let start_date = moment(this.meeting.Start_Date__c);  
@@ -292,19 +331,27 @@ export class MeetingDetailPage implements OnInit {
       this.display_dates = display_dates;
 
       if(this.meeting_dates && this.meeting_dates.length > 0) {
-
+        console.log('### has changed tab: ' + this.has_changed_tab);
+        console.log('### selected_date: ' + this.selected_date);
         if(!this.has_changed_tab) {
-          let today = moment();
-          if (today <= this.meeting_dates[0]) {
-            this.selected_date = this.display_dates[0];
-            this.selected_index = 0;
-          } else if (today >= this.meeting_dates[this.meeting_dates.length - 1]) {
-            this.selected_date = this.display_dates[this.display_dates.length - 1]
-            this.selected_index = this.display_dates.length - 1;
-          } else {
-            this.selected_date = this.display_dates[this.display_dates.indexOf(today.format('ddd D'))];
-            this.selected_index = this.display_dates.indexOf(today.format('ddd D'));
+
+          console.log('#################################');
+          console.log('### SETTING SELECTED DATE');
+          console.log('#################################');
+          if(this.selected_date == null) {
+            let today = moment();
+            if (today <= this.meeting_dates[0]) {
+              this.selected_date = this.display_dates[0];
+              this.selected_index = 0;
+            } else if (today >= this.meeting_dates[this.meeting_dates.length - 1]) {
+              this.selected_date = this.display_dates[this.display_dates.length - 1]
+              this.selected_index = this.display_dates.length - 1;
+            } else {
+              this.selected_date = this.display_dates[this.display_dates.indexOf(today.format('ddd D'))];
+              this.selected_index = this.display_dates.indexOf(today.format('ddd D'));
+            }
           }
+
         } else {
           this.selected_date = this.display_dates[this.selected_index];
         }
@@ -342,19 +389,22 @@ export class MeetingDetailPage implements OnInit {
     }
   }
 
+  openLink(link) {
+    window.open(link.Link_URL__c, '_system', 'location=yes');
+    return false;
+  }
+
+
 
   /**
    * Add enrollment
    */  
   addSessionEnrollment(session: any, event : any) {
-    console.log('### create: ');
     let body = { sessionIds : [ session.Id ] };
-    console.log('### body: ' + JSON.stringify(body));
 
     this.mayorData.querySf('enrollments', 'POST', true, body).then((enrollments) => { 
       this.enrollments = enrollments;
       session.Session_Enrollments__r = {};
-      console.log('### enrollments: ' + JSON.stringify(enrollments));
 
       this.mayorData.querySf('segments', 'GET', true, null).then((sessions) => {
         this.segments = sessions['segments'];
@@ -408,7 +458,6 @@ export class MeetingDetailPage implements OnInit {
         {
           text:'Ok',
           handler:(value:any) => {
-            console.log('### val: ', value);
             this.selected_date = value.Date.text;
             this.has_changed_tab = true;
             this.handleSessions(this.all_sessions);
@@ -433,6 +482,10 @@ export class MeetingDetailPage implements OnInit {
     this.selected_date = ev.detail.value;
     this.has_changed_tab = true;
     this.handleSessions(this.all_sessions);
+    this.has_changed_tab = false;
+    console.log('#################################');
+    console.log('### this.selected_date: ' + this.selected_date);
+    console.log('#################################');
   }
 
   /**
@@ -449,7 +502,7 @@ export class MeetingDetailPage implements OnInit {
    * Navigate to pill page
    */
   goToPage(page : string) {
-    console.log('### meeting: ' + JSON.stringify((this.meeting)));
+
     if(page == 'Attendees') {
       let state = { meeting : this.meeting } ;
       let navigationExtras: NavigationExtras = { state: state };

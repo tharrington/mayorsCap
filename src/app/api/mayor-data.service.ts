@@ -71,7 +71,7 @@ export class MayorDataService {
     const user = JSON.parse(ret.value);
   }
 
-  async querySf(object: string, method: string, auth_required : boolean, body : any) {
+  async querySf(object: string, method: string, auth_required: boolean, body: any) {
     try {
       let endpoint = this.getBaseURL() + object;
       const params = {};

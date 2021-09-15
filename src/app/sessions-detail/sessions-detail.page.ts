@@ -20,6 +20,7 @@ export class SessionsDetailPage implements OnInit {
   segments : any = [];
   sessionId : string;
   links : any = [];
+  resolutions : any = [];
 
   constructor(
     public mayorData : MayorDataService,
@@ -38,7 +39,7 @@ export class SessionsDetailPage implements OnInit {
           if(this.session && this.session.LWEV_Links__r) {
             this.links = this.session.LWEV_Links__r.records;
           }
-
+          this.sortResolutions();
         } else {
           this.mayorData.querySf('segments', 'GET', true, null).then((sessions) => {
             for(let session of sessions['sessions']) {
@@ -46,7 +47,7 @@ export class SessionsDetailPage implements OnInit {
                 this.session = session;
                 this.links = session.LWEV_Links__r;
                 this.initSession();
-
+                this.sortResolutions();
               }
             }
 
@@ -55,8 +56,14 @@ export class SessionsDetailPage implements OnInit {
         
         this.meeting = this.router.getCurrentNavigation().extras.state.meeting;        
       }
-    });  
+    });
+  }
 
+  sortResolutions() {
+
+    if(this.session && this.session.Resolution_Related_Sessions__r && this.session.Resolution_Related_Sessions__r.totalSize > 0)  {
+      this.resolutions = this.session.Resolution_Related_Sessions__r.records.sort((a,b) =>  a.Resolution__r.Resolution_Number__c - b.Resolution__r.Resolution_Number__c );
+    }
   }
 
   goToLink(link: any) {
@@ -127,8 +134,6 @@ export class SessionsDetailPage implements OnInit {
   }
 
   goToSponsor(sponsor : any) {
-    
-
   }
 
   /**

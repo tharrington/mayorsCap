@@ -118,7 +118,7 @@ export class ResolutionsDetailPage implements OnInit {
       this.verifiedcontact = verifiedcontact;
       console.log('### verifiedcontact: ' + JSON.stringify(verifiedcontact));
 
-      if(this.verifiedcontact) {
+      if(this.verifiedcontact && this.verifiedcontact.Contact_Roles__r) {
 
         if(this.verifiedcontact.Contact_Roles__r.totalSize > 0) {
           this.selVerifiedContact = this.verifiedcontact.Contact_Roles__r.records[0].Id;
@@ -137,11 +137,13 @@ export class ResolutionsDetailPage implements OnInit {
 
   matchVotes() {
     let votes = [];
-    for(let con of this.verifiedcontact.Contact_Roles__r.records) {
-      if(con.Id == this.selVerifiedContact) {
-        for(let vote of this.allVotes) {
-          if(vote.cityName == con.Account__r.City__c) {
-            votes.push(vote);
+    if(this.verifiedcontact && this.verifiedcontact.Contact_Roles__r) {
+      for (let con of this.verifiedcontact.Contact_Roles__r.records) {
+        if (con.Id == this.selVerifiedContact) {
+          for (let vote of this.allVotes) {
+            if (vote.cityName == con.Account__r.City__c) {
+              votes.push(vote);
+            }
           }
         }
       }
@@ -254,24 +256,31 @@ export class ResolutionsDetailPage implements OnInit {
    *
    */
   getResolution() {
-    this.mayorData.querySf('resolutions/' + this.resolution.Id, 'GET', false, null).then((resolutions) => {
-      this.resolution = resolutions[0];
-      console.log('### resolutions[0]: ' + JSON.stringify(resolutions[0]));
+    console.log('### resoltion: ' + JSON.stringify(this.resolution));
+    this.mayorData.querySf('resolutions/' + this.resolution.Id, 'GET', true, null).then((resolutions) => {
 
-      if(this.resolution  && this.resolution.Adopted_Date__c) {
-        this.resolution.adopted_date = moment.utc(this.resolution.Adopted_Date__c).format('M/D/YYYY');
-      }
+      console.log('### resolutions[0]: ' + JSON.stringify(resolutions));
+
+      if(resolutions && resolutions.length > 0) {
+        this.resolution = resolutions[0];
 
 
-      if(this.resolution && this.resolution.Resolution_Related_Sessions__r && this.resolution.Resolution_Related_Sessions__r.records) {
-        for(let entry of this.resolution.Resolution_Related_Sessions__r.records) {
-          entry.Session__r.start_time = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('h:mm a');
-          entry.Session__r.end_time =  moment.utc(entry.Session__r.Session_End_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('h:mm a'); 
-          entry.Session__r.day = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('dddd, MMMM Do YYYY');
+        if(this.resolution  && this.resolution.Adopted_Date__c) {
+          this.resolution.adopted_date = moment.utc(this.resolution.Adopted_Date__c).format('M/D/YYYY');
         }
+
+
+        if(this.resolution && this.resolution.Resolution_Related_Sessions__r && this.resolution.Resolution_Related_Sessions__r.records) {
+          for(let entry of this.resolution.Resolution_Related_Sessions__r.records) {
+            entry.Session__r.start_time = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('h:mm a');
+            entry.Session__r.end_time =  moment.utc(entry.Session__r.Session_End_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('h:mm a');
+            entry.Session__r.day = moment.utc(entry.Session__r.Session_Start_Time__c).add(this.meeting.Event_UTC_Offset_in_Hours__c, 'hours').format('dddd, MMMM Do YYYY');
+          }
+        }
+
+        this.determineVotingSponsorship();
       }
 
-      this.determineVotingSponsorship();
 
     }, err => {
     }); 

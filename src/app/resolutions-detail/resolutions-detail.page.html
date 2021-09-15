@@ -5,7 +5,7 @@
   [defaultHref]="'/tabs/tabs/meetings/resolutions'"
 ></app-action-icon-header>
 
-<ion-content>
+<ion-content *ngIf="resolution">
 
   <ion-list>
     <ion-item>
@@ -21,7 +21,7 @@
   <ion-list>
 
     <!-- && (showVotingButton || showSponsorship)-->
-    <ion-item-divider sticky *ngIf="verifiedcontact && verifiedcontact.Contact_Roles__r.totalSize > 1 && (sponsorOpen || votingOpen)" style="background-color: transparent;"> 
+    <ion-item-divider sticky *ngIf="verifiedcontact && verifiedcontact.Contact_Roles__r && verifiedcontact.Contact_Roles__r.totalSize > 1 && (sponsorOpen || votingOpen)" style="background-color: transparent;">
       <ion-label >
         <ion-button expand="block" (click)="openPicker()">Acting As : {{selVerifiedContactDisplayName}} <ion-icon slot="end" name="caret-down-outline"></ion-icon></ion-button>
       </ion-label>
@@ -47,11 +47,11 @@
 
     <ion-item *ngIf="showSponsorship && sponsors && sponsors.length > 0" (click)="postSponsor(false);">
       <ion-icon slot="end" name="create" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Revoke Sponsor</ion-label>
+      <ion-label>Revoke Sponsorship</ion-label>
     </ion-item>
-    <ion-item *ngIf="showSponsorship && sponsors && sponsors.length == 0" (click)="postSponsor(false);">
-      <ion-icon slot="end" name="create" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
-      <ion-label>Sponsor</ion-label>
+    <ion-item *ngIf="showSponsorship && sponsors && sponsors.length == 0" (click)="postSponsor(true);">
+      <ion-icon slot="end" name="create-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-label>Sponsor Resolution</ion-label>
     </ion-item>   
   </ion-list>
 
@@ -79,7 +79,7 @@
 
 
   <ion-list>
-    <ion-item *ngIf="segment == 'resolution'">
+    <ion-item *ngIf="segment == 'resolution' && resolution">
       <ion-label>
         <h2 class="ion-text-wrap"><span class="richText open-browser" [innerHTML]="resolution.Resolution_Text__c"></span></h2>
       </ion-label>
@@ -87,7 +87,7 @@
   </ion-list>
 
 
-  <ion-list *ngIf="resolution.Resolution_Related_Sessions__r">
+  <ion-list *ngIf="resolution && resolution.Resolution_Related_Sessions__r">
   
     <ion-item-divider sticky>
       Sessions

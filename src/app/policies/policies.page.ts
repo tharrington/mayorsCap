@@ -45,7 +45,7 @@ export class PoliciesPage implements OnInit {
 
   ngOnInit() {
     this.getResolutions();
-    this.mayorData.querySf('resolutions', 'GET', false, null).then((policies) => {
+    this.mayorData.querySf('resolutions', 'GET', true, null).then((policies) => {
       Storage.set({ key : 'resolutions', value : JSON.stringify(policies) });
       this.handlePolicies(policies);
     }, err => {

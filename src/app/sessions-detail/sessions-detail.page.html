@@ -12,7 +12,8 @@
 
         <p class="ion-text-wrap">{{session.start_time}} - {{session.end_time}}</p>
         <p class="ion-text-wrap" *ngIf="session.Room__r && session.Room__r.Name">{{session.Room__r.Name}}</p>
-        <h2><ion-badge>{{session.Category__c}}</ion-badge></h2>
+        <h2><ion-badge *ngIf="!session.Category_Tag_Color__c" color="light">{{session.Category__c}}</ion-badge>
+          <ion-badge *ngIf="session.Category_Tag_Color__c" [ngStyle]="{'color': 'white', 'background-color' : session.Category_Tag_Color__c }">{{session.Category__c}}</ion-badge></h2>
       </ion-label>
     </ion-item>
   </ion-list>
@@ -25,13 +26,13 @@
 
 
   <ion-list *ngIf="meeting.Id">
-    <ion-item *ngIf="!session.Session_Enrollments__r && session.Allow_Registration__c" (click)="addEnrollment();">
+    <ion-item *ngIf="!session.Session_Enrollments__r && session.Allow_Registration__c" (click)="createEnrollment();">
       <ion-icon slot="end" name="star-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
       <ion-label>Add To My Agenda</ion-label>
     </ion-item>
 
     <ion-item *ngIf="session.Session_Enrollments__r" (click)="removeEnrollment();">
-      <ion-icon slot="end" name="star-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+      <ion-icon slot="end" name="star" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
       <ion-label>Remove From My Agenda</ion-label>
     </ion-item>
     <ion-item *ngIf="session.Watch_URL__c" (click)="showLink(session.Watch_URL__c);">
@@ -42,7 +43,19 @@
       <ion-icon slot="end" name="globe-outline" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
       <ion-label>{{session.Survey_Call_to_Action__c}}</ion-label>
     </ion-item>
+
+
+    <ng-container *ngIf="links && links.length > 0">
+      <ion-item *ngFor="let link of links; let i = index" (click)="goToLink(link)" >
+        <ion-icon name={{link.Icon_Name__c}} slot="end" [ngStyle]="{'color': meeting.Primary_Color__c ? meeting.Primary_Color__c : '#DA291C' }"></ion-icon>
+
+        <ion-label>
+          <h2 class="ion-text-wrap">{{link.Name}}</h2>
+        </ion-label>
+      </ion-item>
+    </ng-container>
   </ion-list>
+
 
 
 
@@ -123,7 +136,7 @@
         <ion-label>Resolutions</ion-label>
       </ion-list-header>
 
-      <ion-item *ngFor="let resolution of  session.Resolution_Related_Sessions__r.records; let i = index" (click)="goToResolution(resolution)" >
+      <ion-item *ngFor="let resolution of resolutions; let i = index" (click)="goToResolution(resolution)" >
         <ion-label>
           <h2 class="ion-text-wrap">{{resolution.Resolution__r.Long_Name__c}}</h2>
           <p class="ion-text-wrap"><b>Resolution Number:</b> {{resolution.Resolution__r.Resolution_Number__c}}</p>
@@ -131,18 +144,5 @@
       </ion-item>
     </ng-container>
 
-    <ng-container *ngIf="links && links.length > 0">
-      <ion-list-header>
-        <ion-label>Links</ion-label>
-      </ion-list-header>
-
-      <ion-item *ngFor="let link of links; let i = index" (click)="goToLink(link)" >
-        <ion-icon name={{link.Icon_Name__c}} slot="end"></ion-icon>
-
-        <ion-label>
-          <h2 class="ion-text-wrap">{{link.Name}}</h2>
-        </ion-label>
-      </ion-item>
-    </ng-container>
   </ion-list>
 </ion-content>

@@ -30,7 +30,7 @@ export class PoliciesDetailPage implements OnInit {
   }
 
   ngOnInit() {
-    this.mayorData.querySf('resolutions/' + this.policy.Id, 'GET', false, null).then((policy) => {
+    this.mayorData.querySf('resolutions/' + this.policy.Id, 'GET', true, null).then((policy) => {
       this.policy = policy[0];
 
       if(this.policy  && this.policy.Adopted_Date__c) {

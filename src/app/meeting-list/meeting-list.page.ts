@@ -30,24 +30,30 @@ export class MeetingListPage implements OnInit {
   ) {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
-        this.meetings = this.router.getCurrentNavigation().extras.state.meetings;
+
+
+        // this.meetings = this.router.getCurrentNavigation().extras.state.meetings;
+        console.log('### meetings: ' + JSON.stringify(this.meetings));
+        this.meetings = this.router.getCurrentNavigation().extras.state.meetings.sort((a, b) => {
+          return -(moment(a.End_Date__c).diff(b.End_Date__c));
+        });
       }
     });
   }
+
 
   ngOnInit() {
     this.mayorData.querySf('events2', 'GET', true, null).then((meetings) => { 
       Storage.set({ key : 'events2', value : JSON.stringify(meetings) });
       this.meetings = meetings;
+      console.log('### meetings 2: ' + JSON.stringify(this.meetings));
+
+      // this.meetings.sort((a, b) => moment(a.End_Date__c, 'YYYY-MM-DD').isBefore(moment(b.End_Date__c, 'YYYY-MM-DD')) ? -1 : 1, );
+      this.meetings = this.meetings.sort((a, b) => {
+        return -(moment(a.End_Date__c).diff(b.End_Date__c));
+      });
+      console.log('### sorted 2: ' + JSON.stringify(this.meetings));
     }, (err : any) => { });
-  }
-
-  async setSelectedMeetingId(meeting : any) {
-
-  }
-
-  async setSelectedMeeting(meeting : any) {
-
   }
 
   selectMeeting(meeting : any) {
@@ -55,11 +61,5 @@ export class MeetingListPage implements OnInit {
     Storage.set({ key : 'meeting', value : JSON.stringify(meeting) });
 
     this.router.navigate(['/tabs/tabs/meetings']);
-  }
-
-  sortMeetings() {
-    this.meetings.forEach(function(entry) {
-
-    });
   }
 }

@@ -18,6 +18,7 @@ import * as moment from 'moment';
 export class CommitteesDetailPage implements OnInit {
   committee: any;
   meeting: any;
+  members: any = [];
 
   constructor(
     public mayorData       : MayorDataService,
@@ -29,6 +30,16 @@ export class CommitteesDetailPage implements OnInit {
       if (this.router.getCurrentNavigation().extras.state) {
         this.committee = this.router.getCurrentNavigation().extras.state.committee;
         this.meeting = this.router.getCurrentNavigation().extras.state.meeting;
+        console.log('### committe:: ' + JSON.stringify(this.committee));
+        if(this.committee && this.committee.Committee_Members__r) {
+          for(let member of this.committee.Committee_Members__r.records) {
+            console.log('### member: ' + member.Type__c);
+            if(member.Type__c == 'Member' || member.Type__c == 'Chair' || member.Type__c == 'Vice Chair' || member.Type__c == 'Co-Chair') {
+              this.members.push(member);
+            }
+          }
+        }
+
       }
     });  
   }
